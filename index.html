@@ -1,0 +1,1473 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+<title>For You, Ampill 🤍</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;0,900;1,400;1,700&family=Cormorant+Infant:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400;500;600&family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Pinyon+Script&display=swap" rel="stylesheet"/>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+/* ============================
+   DESIGN SYSTEM — Red Luxury · Cream · White
+   Single unified palette throughout
+   ============================ */
+:root{
+  /* Core palette */
+  --ivory:#faf6f1;
+  --ivory2:#f3ece3;
+  --ivory3:#ece1d4;
+  --paper:#f8f2ea;
+  --burg:#7a1f2e;
+  --burg2:#9c2d3f;
+  --burg3:#c04055;
+  --blush:#e8b4b8;
+  --blush2:#f2d4d6;
+  --blush3:#faeaeb;
+  --blush4:#fdf0f1;
+  --gold:#b8924a;
+  --gold2:#d4a85c;
+  --gold3:#eddcb0;
+  --charcoal:#2a2018;
+  --charcoal2:#3d2e22;
+  --mink:#8a7060;
+  --mink2:#b8a090;
+  --mink3:#d8cec4;
+  --t1:#2a2018;
+  --t2:#5a4535;
+  --t3:#9a8070;
+  --t4:#c8b8ac;
+  --line:rgba(42,32,24,.10);
+  --line2:rgba(122,31,46,.15);
+
+  /* Spotify/music page — now light warm cream instead of dark */
+  --sp-bg:#f5ede4;
+  --sp-bg2:#ecddd0;
+  --sp-card-bg:white;
+  --sp-border:rgba(122,31,46,.12);
+  --sp-text:var(--charcoal);
+  --sp-sub:var(--mink);
+  --sp-accent:var(--burg);
+  --sp-btn-bg:var(--burg);
+  --sp-btn-text:var(--ivory);
+  --sp-bar-bg:rgba(122,31,46,.1);
+  --sp-bar-fill:var(--burg2);
+  --sp-eq-col:var(--burg);
+
+  /* Main page — light warm instead of dark */
+  --main-bg:var(--ivory);
+  --main-text:var(--charcoal);
+  --main-sub:var(--mink);
+  --mp-bg:var(--blush3);
+  --mp-border:rgba(122,31,46,.14);
+  --mp-text:var(--charcoal);
+  --mp-sub:var(--mink2);
+  --mp-eq:var(--burg);
+  --mp-prog:var(--burg2);
+  --mp-vinyl-bg:var(--burg);
+  --mp-dot:var(--blush2);
+}
+
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{width:100%;height:100%;overflow-x:hidden;font-family:'Jost',sans-serif;background:var(--ivory);color:var(--t1)}
+
+/* Paper grain */
+body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='paper'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paper)' opacity='0.035'/%3E%3C/svg%3E");opacity:.65;mix-blend-mode:multiply}
+
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:var(--ivory2)}::-webkit-scrollbar-thumb{background:var(--burg);border-radius:2px}
+
+/* Cursor */
+.cur{position:fixed;width:8px;height:8px;border-radius:50%;background:var(--burg);pointer-events:none;z-index:99999;transform:translate(-50%,-50%);transition:width .2s,height .2s,opacity .2s}
+.cur-r{position:fixed;width:30px;height:30px;border-radius:50%;border:1px solid rgba(122,31,46,.3);pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:left .11s ease,top .11s ease,width .22s,height .22s}
+@media(hover:none){.cur,.cur-r{display:none}}
+
+/* Pages */
+.page{position:fixed;inset:0;display:none;z-index:10;overflow:hidden;flex-direction:column;align-items:center;justify-content:center}
+.page.active{display:flex;animation:pgIn .7s cubic-bezier(.16,1,.3,1) both}
+@keyframes pgIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+.slide-page{position:fixed;inset:0;display:none;z-index:20;overflow-y:auto;-webkit-overflow-scrolling:touch;flex-direction:column;align-items:center;padding:0}
+.slide-page.active{display:flex;animation:slideUp .55s cubic-bezier(.16,1,.3,1) both}
+@keyframes slideUp{from{opacity:0;transform:translateY(100%)}to{opacity:1;transform:none}}
+#slide-overlay{position:fixed;inset:0;z-index:19;background:rgba(250,246,241,.96);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);opacity:0;pointer-events:none;transition:opacity .4s}
+#slide-overlay.active{opacity:1;pointer-events:auto}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+@keyframes popIn{from{transform:scale(.6) rotate(-8deg);opacity:0}to{transform:scale(1) rotate(0);opacity:1}}
+@keyframes shimmer{to{background-position:200% center}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-7px)}40%{transform:translateX(7px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+@keyframes flickerF{from{transform:scaleX(1) scaleY(1)}to{transform:scaleX(.82) scaleY(1.12)}}
+@keyframes dropCk{0%{transform:translateX(-50%) translateY(-500px);opacity:0}60%{transform:translateX(-50%) translateY(8px);opacity:1}80%{transform:translateX(-50%) translateY(-5px)}100%{transform:translateX(-50%) translateY(0);opacity:1}}
+@keyframes rotate3d{0%{transform:rotateY(0deg) rotateX(10deg)}100%{transform:rotateY(360deg) rotateX(10deg)}}
+@keyframes pulse3d{0%{transform:scale(.92)}100%{transform:scale(1.07)}}
+@keyframes eqDance{from{height:2px}to{height:18px}}
+@keyframes floatEl{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+
+/* Toast */
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-120px);z-index:99997;background:var(--charcoal);border:1px solid rgba(184,146,74,.3);border-radius:50px;padding:11px 22px;font-size:.75rem;color:var(--gold3);letter-spacing:.5px;font-family:'Jost',sans-serif;font-weight:300;transition:transform .5s cubic-bezier(.16,1,.3,1);pointer-events:none;display:flex;align-items:center;gap:8px}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.cf{position:fixed;pointer-events:none;z-index:50;border-radius:1px}
+
+/* ========================
+   WELCOME PAGE
+   ======================== */
+#welcome-page{background:var(--ivory);overflow:hidden}
+.w-circle{position:absolute;right:-8vw;top:-6vw;width:min(56vw,420px);height:min(56vw,420px);border-radius:50%;background:radial-gradient(circle at 40% 40%,var(--blush3),var(--ivory2));border:1px solid rgba(184,146,74,.16);animation:floatEl 7s ease-in-out infinite}
+.w-circle2{position:absolute;left:-10vw;bottom:-8vw;width:min(44vw,320px);height:min(44vw,320px);border-radius:50%;border:1px solid var(--line2);background:transparent}
+.w-vert{position:absolute;left:28px;top:50%;transform:translateY(-50%);font-family:'Jost',sans-serif;font-size:.52rem;letter-spacing:5px;text-transform:uppercase;color:var(--mink);writing-mode:vertical-rl;opacity:.35}
+.w-vert2{position:absolute;right:24px;bottom:22%;font-family:'Jost',sans-serif;font-size:.5rem;letter-spacing:4px;text-transform:uppercase;color:var(--mink);writing-mode:vertical-rl;opacity:.28}
+.w-edition{position:absolute;top:26px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:12px;opacity:.5}
+.w-edition-line{width:38px;height:1px;background:var(--burg)}
+.w-edition-txt{font-family:'Jost',sans-serif;font-size:.52rem;letter-spacing:5px;text-transform:uppercase;color:var(--burg2)}
+.w-content{position:relative;z-index:2;text-align:center;padding:0 32px;animation:fadeUp 1s .3s ease both}
+.w-vol{font-family:'Jost',sans-serif;font-size:.55rem;letter-spacing:6px;text-transform:uppercase;color:var(--mink);margin-bottom:14px;opacity:.55}
+.w-title{font-family:'Playfair Display',serif;font-size:clamp(3.4rem,13vw,7.5rem);font-weight:900;line-height:.88;color:var(--charcoal);letter-spacing:-2px;margin-bottom:0}
+.w-title em{font-style:italic;color:var(--burg);display:block}
+.w-script{font-family:'Alex Brush',cursive;font-size:clamp(1.8rem,6vw,3rem);color:var(--burg2);margin:10px 0 36px;letter-spacing:1px}
+.w-divider{display:flex;align-items:center;gap:14px;justify-content:center;margin-bottom:32px}
+.w-divider-line{flex:1;max-width:60px;height:1px;background:linear-gradient(90deg,transparent,var(--burg2))}
+.w-divider-dot{width:5px;height:5px;border-radius:50%;background:var(--gold)}
+.w-btn{display:inline-flex;align-items:center;gap:12px;padding:15px 38px;border:1px solid var(--charcoal);background:var(--charcoal);color:var(--ivory);font-family:'Jost',sans-serif;font-weight:300;font-size:.75rem;letter-spacing:3.5px;text-transform:uppercase;cursor:pointer;transition:all .4s cubic-bezier(.16,1,.3,1);position:relative;overflow:hidden;border-radius:0}
+.w-btn::before{content:'';position:absolute;inset:0;background:var(--burg);transform:translateX(-101%);transition:transform .4s cubic-bezier(.16,1,.3,1)}
+.w-btn:hover::before{transform:translateX(0)}
+.w-btn span,.w-btn .ico{position:relative;z-index:1;transition:transform .3s}
+.w-btn:hover .ico{transform:translateX(5px)}
+.w-btn .ico{font-size:.9rem;stroke:currentColor}
+
+/* ========================
+   LOVE PAGE
+   ======================== */
+#love-page{background:linear-gradient(160deg,#fdfbf7 0%,#ffffff 50%,#fbf8f3 100%);overflow:hidden}
+.love-corner{position:absolute;width:28px;height:28px;border-color:rgba(122,31,46,.18);border-style:solid}
+.love-corner.tl{top:20px;left:20px;border-width:1px 0 0 1px}
+.love-corner.tr{top:20px;right:20px;border-width:1px 1px 0 0}
+.love-corner.bl{bottom:20px;left:20px;border-width:0 0 1px 1px}
+.love-corner.br{bottom:20px;right:20px;border-width:0 1px 1px 0}
+.love-dots{position:absolute;inset:0;background-image:radial-gradient(circle,rgba(122,31,46,.06) 1px,transparent 1px);background-size:28px 28px;pointer-events:none}
+.love-content{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 28px;animation:loveReveal .9s cubic-bezier(.16,1,.3,1) both}
+@keyframes loveReveal{from{opacity:0;transform:scale(.97) translateY(12px)}to{opacity:1;transform:none}}
+.love-eyebrow{font-family:'Jost',sans-serif;font-size:.48rem;letter-spacing:7px;text-transform:uppercase;color:rgba(122,31,46,.45);margin-bottom:12px}
+.love-scene{perspective:1000px;width:min(300px,72vw);height:min(300px,72vw);display:flex;align-items:center;justify-content:center;margin:0 auto 6px}
+.heart-3d{width:100%;height:100%;position:relative;transform-style:preserve-3d;animation:rotate3d 8s linear infinite, pulse3d 1.5s ease-in-out infinite alternate}
+.heart-3d canvas{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none}
+.hlayer-1{transform:translateZ(-18px) scale(.96);opacity:.7;filter:brightness(.72)}
+.hlayer-2{transform:translateZ(-9px) scale(.98);opacity:.85;filter:brightness(.87)}
+.hlayer-3{transform:translateZ(0px)}
+.hlayer-4{transform:translateZ(9px) scale(1.02);opacity:.95;filter:brightness(1.1)}
+.hlayer-5{transform:translateZ(18px) scale(1.04);opacity:.88;filter:brightness(1.22)}
+.love-divider{display:flex;align-items:center;gap:16px;margin:4px 0 14px;width:min(340px,82vw)}
+.love-divider-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(122,31,46,.2),transparent)}
+.love-divider-diamond{width:6px;height:6px;background:rgba(184,146,74,.5);transform:rotate(45deg);flex-shrink:0}
+.love-headline{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,5.5vw,2.2rem);font-weight:700;color:var(--burg);font-style:italic;line-height:1.15;margin-bottom:6px}
+.love-sub{font-family:'Jost',sans-serif;font-size:.65rem;letter-spacing:4px;text-transform:uppercase;color:rgba(42,32,24,.35);margin-bottom:28px}
+.love-footer{font-family:'Jost',sans-serif;font-size:.5rem;letter-spacing:4px;text-transform:uppercase;color:rgba(42,32,24,.28);margin-top:6px}
+.love-btn{display:inline-flex;align-items:center;gap:12px;padding:13px 34px;border:1px solid var(--charcoal);background:var(--charcoal);color:var(--ivory);font-family:'Jost',sans-serif;font-weight:300;font-size:.72rem;letter-spacing:3.5px;text-transform:uppercase;cursor:pointer;transition:all .4s;position:relative;overflow:hidden;border-radius:0}
+.love-btn::before{content:'';position:absolute;inset:0;background:var(--burg);transform:translateX(-101%);transition:transform .4s cubic-bezier(.16,1,.3,1)}
+.love-btn:hover::before{transform:translateX(0)}
+.love-btn span,.love-btn .ico{position:relative;z-index:1;stroke:currentColor;transition:transform .3s}
+.love-btn:hover .ico{transform:translateX(5px)}
+.love-btn .ico{font-size:.9rem}
+
+/* ========================
+   SPOTIFY PAGE — Light Warm Cream
+   (no dark, no green, consistent with brand)
+   ======================== */
+#spotify-page{
+  background:var(--sp-bg);
+  overflow:hidden;
+}
+/* Soft decorative layer */
+.sp-art-layer{position:absolute;inset:0;pointer-events:none}
+.sp-half{position:absolute;left:0;top:0;width:45%;height:100%;background:rgba(122,31,46,.04)}
+.sp-lines{position:absolute;inset:0;background-image:repeating-linear-gradient(90deg,rgba(122,31,46,.025) 0,transparent 1px,transparent 80px)}
+/* Large circle accent */
+.sp-circle{position:absolute;right:-8vw;top:-6vw;width:min(52vw,380px);height:min(52vw,380px);border-radius:50%;background:radial-gradient(circle,var(--blush3),transparent);border:1px solid var(--line2);pointer-events:none}
+
+.sp-wrapper{position:relative;z-index:2;width:100%;max-width:400px;display:flex;flex-direction:column;align-items:center;padding:0 28px}
+.sp-eyebrow{font-family:'Jost',sans-serif;font-size:.52rem;letter-spacing:6px;text-transform:uppercase;color:var(--sp-sub);margin-bottom:18px;opacity:.7}
+.sp-card{width:100%;background:var(--sp-card-bg);border:1px solid var(--sp-border);padding:3px;border-radius:0;margin-bottom:22px;position:relative;box-shadow:0 8px 32px rgba(122,31,46,.06)}
+.sp-card::before{content:'NOW PLAYING';position:absolute;top:-10px;left:14px;font-family:'Jost',sans-serif;font-size:.42rem;letter-spacing:4px;background:var(--burg);color:var(--ivory);padding:3px 9px;font-weight:700}
+.sp-video-inner{width:100%;height:190px;background:linear-gradient(135deg,var(--blush3),var(--blush2));border-radius:0;overflow:hidden;position:relative;cursor:pointer}
+.sp-video-inner video,.sp-video-inner img{width:100%;height:100%;object-fit:cover}
+.sp-video-fallback{width:100%;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;background:linear-gradient(135deg,var(--blush3) 0%,var(--blush2) 60%,var(--blush3) 100%)}
+.sp-music-icon{width:56px;height:56px;border-radius:50%;border:1px solid rgba(122,31,46,.2);display:flex;align-items:center;justify-content:center;background:white}
+.sp-music-icon .ico{font-size:1.4rem;stroke:var(--burg);opacity:.7}
+.sp-song{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;color:var(--sp-text);font-style:italic;line-height:1.1;margin-bottom:4px;text-align:center;width:100%}
+.sp-artist{font-family:'Jost',sans-serif;font-size:.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--sp-sub);margin-bottom:16px;text-align:center;width:100%;opacity:.6}
+.sp-time-row{display:flex;justify-content:space-between;font-family:'Jost',sans-serif;font-size:.6rem;color:var(--t4);margin-bottom:7px;letter-spacing:.4px;width:100%}
+.sp-bar{height:2px;background:var(--sp-bar-bg);border-radius:1px;margin-bottom:18px;width:100%}
+.sp-bar-fill{height:100%;background:var(--sp-bar-fill);border-radius:1px;width:0;transition:width .1s linear}
+.sp-controls{display:flex;align-items:center;gap:20px;margin-bottom:18px}
+.sp-cb{background:none;border:none;color:var(--mink3);cursor:pointer;transition:color .18s,transform .14s;padding:4px}
+.sp-cb:hover{color:var(--burg);transform:scale(1.1)}
+.sp-cb .ico{font-size:1.05rem;stroke:currentColor}
+.sp-play-btn{width:48px;height:48px;border-radius:50%;background:var(--burg);border:none;color:var(--ivory);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .16s,background .2s;box-shadow:0 4px 16px rgba(122,31,46,.3)}
+.sp-play-btn:hover{transform:scale(1.08);background:var(--burg2)}
+.sp-play-btn .ico{font-size:1.25rem;stroke:currentColor}
+.sp-eq{display:flex;gap:2.5px;align-items:flex-end;height:16px;margin-bottom:18px}
+.sp-eqb{width:2.5px;border-radius:1px;background:var(--burg2);animation:eqDance var(--d,.4s) ease-in-out infinite alternate}
+.sp-cont-btn{padding:11px 26px;border:1px solid var(--line2);background:transparent;color:var(--mink);font-family:'Jost',sans-serif;font-size:.65rem;letter-spacing:3px;text-transform:uppercase;cursor:pointer;transition:all .22s;display:flex;align-items:center;gap:8px;border-radius:0}
+.sp-cont-btn:hover{border-color:var(--burg);color:var(--burg);background:var(--blush3)}
+.sp-cont-btn .ico{font-size:.9rem;stroke:currentColor}
+
+/* ========================
+   PIN PAGE
+   ======================== */
+#pin-page{background:var(--ivory)}
+.pin-circle{position:absolute;border-radius:50%;border:1px solid var(--line2);top:50%;left:50%;transform:translate(-50%,-50%)}
+.pin-card{background:white;border:1px solid var(--line);max-width:310px;width:calc(100% - 48px);padding:34px 26px;position:relative;z-index:2;box-shadow:0 24px 80px rgba(42,32,24,.07),0 4px 16px rgba(42,32,24,.04)}
+.pin-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--burg),var(--gold),var(--burg2))}
+.pin-label{font-family:'Jost',sans-serif;font-size:.52rem;letter-spacing:5px;text-transform:uppercase;color:var(--mink);text-align:center;margin-bottom:8px;opacity:.55}
+.pin-t{font-family:'Playfair Display',serif;font-size:1.45rem;font-weight:700;text-align:center;color:var(--charcoal);margin-bottom:4px}
+.pin-s{font-family:'Jost',sans-serif;font-size:.68rem;color:var(--t3);text-align:center;margin-bottom:22px;font-weight:300}
+.pin-dots{display:flex;justify-content:center;gap:14px;margin-bottom:22px;height:16px;align-items:center}
+.pin-dot{width:11px;height:11px;border-radius:50%;border:1.5px solid var(--mink3);background:transparent;transition:all .3s cubic-bezier(.34,1.56,.64,1)}
+.pin-dot.filled{background:var(--burg2);border-color:var(--burg2);box-shadow:0 0 0 4px rgba(122,31,46,.11)}
+.numpad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.nk{border:1px solid var(--line);border-radius:0;padding:14px 8px;font-size:1rem;font-weight:400;font-family:'Playfair Display',serif;background:var(--ivory);color:var(--charcoal);cursor:pointer;transition:all .16s;display:flex;align-items:center;justify-content:center}
+.nk:hover{background:var(--charcoal);color:var(--ivory);border-color:var(--charcoal)}
+.nk:active{transform:scale(.94)}
+.nk.ok{background:var(--burg);color:white;border-color:var(--burg);font-family:'Jost',sans-serif;font-weight:300;font-size:.75rem;letter-spacing:2px}
+.nk.ok:hover{background:var(--burg2)}
+.nk.ok .ico{stroke:white;font-size:1.05rem}
+.nk.del{background:var(--ivory2);color:var(--mink)}
+.nk.del .ico{font-size:1rem;stroke:var(--mink)}
+.pin-err{color:var(--burg);text-align:center;font-size:.68rem;height:18px;margin-top:12px;font-family:'Jost',sans-serif;font-weight:300}
+
+/* ========================
+   TRANSITION
+   ======================== */
+#transition-page{background:var(--ivory)}
+.tr-big-text{position:absolute;font-family:'Playfair Display',serif;font-size:clamp(4rem,18vw,12rem);font-weight:900;color:rgba(122,31,46,.04);letter-spacing:-4px;line-height:1;user-select:none;white-space:nowrap;top:50%;left:50%;transform:translate(-50%,-50%)}
+.trans-content{position:relative;z-index:2;text-align:center;padding:0 28px;animation:fadeUp 1s ease both}
+.trans-eyebrow{font-family:'Jost',sans-serif;font-size:.52rem;letter-spacing:5px;text-transform:uppercase;color:var(--mink);margin-bottom:12px;opacity:.48}
+.trans-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,8vw,4rem);font-weight:900;color:var(--charcoal);line-height:1;margin-bottom:6px}
+.trans-title em{font-style:italic;color:var(--burg)}
+.trans-sub{font-family:'Alex Brush',cursive;font-size:clamp(1.4rem,4.5vw,2.2rem);color:var(--burg2);margin-bottom:34px}
+.countdown-w{border:1px solid var(--line);background:white;display:inline-flex;margin-bottom:34px}
+.cd-box{padding:20px 18px;text-align:center;position:relative}
+.cd-box:not(:last-child){border-right:1px solid var(--line)}
+.cd-val{font-family:'Playfair Display',serif;font-size:clamp(2rem,6vw,2.8rem);font-weight:900;color:var(--burg);line-height:1}
+.cd-lbl{font-family:'Jost',sans-serif;font-size:.46rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--t3);margin-top:6px}
+.trans-loader{width:26px;height:26px;margin:22px auto 0;border:2px solid var(--ivory3);border-top-color:var(--burg);border-radius:50%;animation:spin 1s linear infinite}
+
+/* ========================
+   QUIZ
+   ======================== */
+#quiz-page{background:var(--ivory);justify-content:flex-start;padding-top:0;overflow-y:auto}
+.quiz-shell{max-width:480px;width:100%;display:flex;flex-direction:column;gap:14px;padding:26px 20px 46px;margin:0 auto}
+.quiz-hdr-bar{display:flex;align-items:center;justify-content:space-between;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.quiz-badge{display:flex;align-items:center;gap:7px;font-family:'Jost',sans-serif;font-size:.58rem;letter-spacing:3px;text-transform:uppercase;color:var(--burg2);opacity:.75}
+.quiz-badge .ico{font-size:.82rem;stroke:var(--burg2)}
+.quiz-counter{font-family:'Playfair Display',serif;font-size:.92rem;font-style:italic;color:var(--t3)}
+.quiz-prog{height:2px;background:var(--ivory3)}
+.quiz-prog-fill{height:100%;background:linear-gradient(90deg,var(--burg),var(--gold2));transition:width .6s cubic-bezier(.16,1,.3,1);width:0}
+.quiz-card{background:white;border:1px solid var(--line);padding:26px 22px;box-shadow:0 8px 30px rgba(42,32,24,.05)}
+.q-eyebrow{font-family:'Jost',sans-serif;font-size:.48rem;letter-spacing:4px;text-transform:uppercase;color:var(--mink);margin-bottom:12px;opacity:.48;display:flex;align-items:center;gap:7px}
+.q-eyebrow .ico{font-size:.72rem;stroke:var(--mink)}
+.q-txt{font-family:'Playfair Display',serif;font-size:clamp(.93rem,2.5vw,1.06rem);color:var(--charcoal);line-height:1.65;margin-bottom:18px;font-style:italic}
+.q-opts{display:flex;flex-direction:column;gap:8px}
+.qopt{background:var(--ivory);border:1px solid var(--line);padding:12px 14px;color:var(--t2);font-size:.8rem;cursor:pointer;text-align:left;font-family:'Jost',sans-serif;font-weight:300;transition:all .2s;display:flex;align-items:center;gap:11px;border-radius:0;position:relative;overflow:hidden}
+.qopt::before{content:'';position:absolute;left:0;top:0;bottom:0;width:0;background:var(--burg);transition:width .22s}
+.qopt-letter{width:23px;height:23px;border:1px solid var(--mink3);display:flex;align-items:center;justify-content:center;font-size:.58rem;font-weight:600;color:var(--mink);flex-shrink:0;font-family:'Jost',sans-serif;letter-spacing:.4px;transition:all .2s;position:relative;z-index:1}
+.qopt-text{position:relative;z-index:1;transition:color .2s}
+.qopt:hover{border-color:var(--burg);background:white}
+.qopt:hover::before{width:3px}
+.qopt:hover .qopt-letter{border-color:var(--burg);color:var(--burg)}
+.qopt.picked{background:var(--burg);border-color:var(--burg);color:white}
+.qopt.picked .qopt-letter{background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.35);color:white}
+.qopt.picked .qopt-text{color:white}
+.qopt.picked::before{width:0}
+.quiz-res{display:none;text-align:center;padding:8px 0}
+.trophy-w{width:60px;height:60px;border:1px solid var(--line2);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;background:var(--blush3)}
+.trophy-w .ico{font-size:1.5rem;stroke:var(--burg)}
+.quiz-res h3{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--charcoal)}
+.big-score{font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:900;color:var(--burg);display:block;line-height:1;margin:8px 0}
+.quiz-res p{color:var(--t3);font-size:.78rem;margin:6px 0 22px;line-height:1.8;font-family:'Jost',sans-serif;font-weight:300}
+.quiz-go-btn{display:inline-flex;align-items:center;gap:9px;padding:13px 30px;border:1px solid var(--charcoal);background:var(--charcoal);color:var(--ivory);font-family:'Jost',sans-serif;font-weight:300;font-size:.7rem;letter-spacing:3px;text-transform:uppercase;cursor:pointer;transition:all .28s;border-radius:0;position:relative;overflow:hidden}
+.quiz-go-btn::before{content:'';position:absolute;inset:0;background:var(--burg);transform:translateX(-101%);transition:transform .32s cubic-bezier(.16,1,.3,1)}
+.quiz-go-btn:hover::before{transform:translateX(0)}
+.quiz-go-btn span,.quiz-go-btn .ico{position:relative;z-index:1;stroke:currentColor}
+
+/* ========================
+   CAKE
+   ======================== */
+#cake-page{background:var(--ivory);overflow:hidden}
+.cake-strip{position:absolute;top:0;right:0;width:40%;height:100%;background:linear-gradient(135deg,var(--blush3),var(--ivory2));clip-path:polygon(15% 0,100% 0,100% 100%,0 100%)}
+.cake-bg-text{position:absolute;font-family:'Playfair Display',serif;font-size:clamp(5rem,20vw,13rem);font-weight:900;color:rgba(122,31,46,.04);white-space:nowrap;letter-spacing:-3px;user-select:none;bottom:-2%;left:50%;transform:translateX(-50%)}
+.cake-content{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;padding:0 32px}
+.cake-eyebrow{font-family:'Jost',sans-serif;font-size:.52rem;letter-spacing:5px;text-transform:uppercase;color:var(--mink);margin-bottom:8px;opacity:.48}
+.cake-h1{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,11vw,6rem);font-weight:900;color:var(--charcoal);line-height:.9;letter-spacing:-2px}
+.cake-h1 em{font-style:italic;color:var(--burg);display:block}
+.cake-script{font-family:'Alex Brush',cursive;font-size:clamp(1.4rem,4.5vw,2.2rem);color:var(--burg2);margin:8px 0 10px}
+.cake-scene{position:relative;width:155px;height:195px;margin:12px auto}
+.ck{position:absolute;left:50%;transform:translateX(-50%) translateY(-500px);opacity:0;border-radius:4px}
+.ck1{width:150px;height:28px;bottom:0;background:linear-gradient(135deg,#5c2018,#8b3520,#5c2018);box-shadow:0 5px 0 #3a1008}
+.ck2{width:130px;height:24px;bottom:32px;background:linear-gradient(135deg,#8b3520,#b04528,#8b3520);box-shadow:0 4px 0 #5c2018}
+.ck3{width:110px;height:20px;bottom:60px;background:linear-gradient(135deg,#d4905a,#e8b080,#d4905a);box-shadow:0 3px 0 #8b3520}
+.ck-cr{width:118px;height:13px;bottom:82px;background:linear-gradient(180deg,var(--ivory),var(--ivory2));border-radius:9px 9px 3px 3px;box-shadow:0 3px 0 #c8b090}
+.ck-cd{width:9px;height:38px;bottom:100px;background:linear-gradient(#e8c0c8,#f5d8dc);border-radius:3px 3px 1px 1px}
+.flame-w{position:absolute;bottom:144px;left:50%;transform:translateX(-50%);opacity:0;transition:opacity .5s}
+.flame-i{width:10px;height:17px;background:radial-gradient(ellipse at 50% 100%,#fffde7,#ffb300 45%,#ff6f00);border-radius:50% 50% 35% 35%;margin:auto;animation:flickerF .35s ease-in-out infinite alternate}
+.flame-g{position:absolute;inset:-7px;background:radial-gradient(circle,rgba(255,170,0,.4) 0%,transparent 65%);border-radius:50%;animation:flickerF .4s ease-in-out infinite alternate-reverse}
+.ck.drop{animation:dropCk .6s cubic-bezier(.25,.8,.25,1) forwards}
+.cake-go-btn{display:inline-flex;align-items:center;gap:11px;padding:13px 34px;border:1px solid var(--charcoal);background:var(--charcoal);color:var(--ivory);font-family:'Jost',sans-serif;font-weight:300;font-size:.7rem;letter-spacing:3.5px;text-transform:uppercase;cursor:pointer;transition:all .4s;position:relative;overflow:hidden;margin-top:14px;animation:fadeUp .8s .4s ease both;border-radius:0}
+.cake-go-btn::before{content:'';position:absolute;inset:0;background:var(--burg);transform:translateX(-101%);transition:transform .38s cubic-bezier(.16,1,.3,1)}
+.cake-go-btn:hover::before{transform:translateX(0)}
+.cake-go-btn span,.cake-go-btn .ico{position:relative;z-index:1;stroke:currentColor;transition:transform .28s}
+.cake-go-btn:hover .ico{transform:translateX(4px)}
+
+/* ========================
+   MAIN PAGE — Light Warm Cream
+   ======================== */
+#main-page{background:var(--ivory);justify-content:flex-start;overflow-y:auto;padding:0;align-items:stretch;color:var(--charcoal)}
+.main-wrap{width:100%;max-width:900px;margin:0 auto;padding:0 0 60px;display:flex;flex-direction:column}
+
+/* Magazine header */
+.mag-header{padding:18px 22px 0;display:flex;flex-direction:column}
+.mag-header-top{display:flex;align-items:center;justify-content:space-between;padding-bottom:13px;border-bottom:1px solid var(--line)}
+.mag-logo{font-family:'Playfair Display',serif;font-size:1.28rem;font-weight:900;color:var(--charcoal);letter-spacing:-1px}
+.mag-logo em{font-style:italic;color:var(--burg)}
+.mag-date{font-family:'Jost',sans-serif;font-size:.52rem;letter-spacing:3px;text-transform:uppercase;color:var(--mink);display:flex;align-items:center;gap:5px;opacity:.6}
+.mag-date .ico{font-size:.72rem;stroke:var(--mink)}
+.mag-tagline{padding:10px 0 13px;overflow:hidden}
+.mag-scroll{display:flex;gap:20px;font-family:'Jost',sans-serif;font-size:.52rem;letter-spacing:3px;text-transform:uppercase;color:var(--mink2);white-space:nowrap;opacity:.45;animation:scrollTag 18s linear infinite}
+.mag-scroll span{display:flex;align-items:center;gap:8px}
+.mag-scroll span::before{content:'✦';color:var(--gold);font-size:.45rem}
+@keyframes scrollTag{to{transform:translateX(-50%)}}
+
+/* Hero */
+.hero-ed{display:grid;grid-template-columns:1fr 1fr;min-height:0;border-bottom:1px solid var(--line)}
+@media(max-width:560px){.hero-ed{grid-template-columns:1fr}}
+.hero-ed-media{position:relative;overflow:hidden;min-height:250px;background:var(--blush3)}
+.hero-ed-media video,.hero-ed-media img{width:100%;height:100%;object-fit:cover;display:block}
+.hero-ed-media-overlay{position:absolute;inset:0;background:linear-gradient(to right,transparent 55%,rgba(250,246,241,.15))}
+.hero-ed-fallback{width:100%;height:100%;min-height:250px;background:linear-gradient(135deg,var(--blush3) 0%,var(--blush2) 50%,var(--blush3) 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}
+.hero-ed-fallback .ico{font-size:1.8rem;stroke:rgba(122,31,46,.35)}
+.hero-ed-fallback p{font-family:'Pinyon Script',cursive;font-size:1.5rem;color:rgba(122,31,46,.45)}
+.hero-ed-badge{position:absolute;top:13px;left:13px;background:var(--burg);color:var(--ivory);font-family:'Jost',sans-serif;font-size:.46rem;letter-spacing:3px;text-transform:uppercase;padding:4px 9px;font-weight:600}
+.hero-ed-info{padding:22px 18px;display:flex;flex-direction:column;justify-content:space-between;background:white;border-left:1px solid var(--line)}
+.hero-ed-kicker{font-family:'Jost',sans-serif;font-size:.48rem;letter-spacing:4px;text-transform:uppercase;color:var(--burg2);margin-bottom:9px;opacity:.75}
+.hero-ed-name{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,4.5vw,2.2rem);font-weight:900;line-height:1.05;color:var(--charcoal);margin-bottom:6px}
+.hero-ed-name em{font-style:italic;color:var(--burg)}
+.hero-ed-script{font-family:'Alex Brush',cursive;font-size:1.3rem;color:var(--burg2);margin-bottom:16px}
+.cd-card{border:1px solid var(--line);padding:12px;background:var(--ivory)}
+.cd-card-label{font-family:'Jost',sans-serif;font-size:.46rem;letter-spacing:3px;text-transform:uppercase;color:var(--mink);margin-bottom:7px;opacity:.6}
+#countdown{font-family:'Playfair Display',serif;font-weight:700;font-size:.95rem;color:var(--burg)}
+.hero-ed-dob{font-family:'Jost',sans-serif;font-size:.58rem;color:var(--t4);display:flex;align-items:center;gap:5px;margin-top:14px;letter-spacing:.4px}
+.hero-ed-dob .ico{font-size:.68rem;stroke:var(--t4)}
+
+/* Mini player — light warm with burgundy accents */
+/* Mini player — elegant glass dark strip */
+.mini-player{
+  background:linear-gradient(135deg,var(--charcoal) 0%,#1e140c 60%,var(--charcoal2) 100%);
+  padding:0;cursor:pointer;
+  transition:background .3s;
+  border-top:1px solid rgba(184,146,74,.18);
+  border-bottom:1px solid rgba(184,146,74,.18);
+  position:relative;overflow:hidden;
+}
+.mini-player::before{
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(90deg,rgba(184,146,74,.03) 0px,rgba(184,146,74,.03) 1px,transparent 1px,transparent 48px);
+  pointer-events:none;
+}
+.mini-player:hover{background:linear-gradient(135deg,#1e140c 0%,var(--charcoal) 60%,#1a0f08 100%)}
+/* Gold top line accent */
+.mini-player::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),var(--gold2),var(--gold),transparent);opacity:.6}
+
+.mp-inner{display:flex;align-items:center;gap:14px;padding:14px 18px}
+.mp-vinyl{
+  width:44px;height:44px;border-radius:50%;flex-shrink:0;
+  background:conic-gradient(from 0deg,#1a1008,#2e1e14,#1a1008,#3a2518,#1a1008);
+  border:2px solid rgba(184,146,74,.25);
+  position:relative;box-shadow:0 4px 16px rgba(0,0,0,.5);
+}
+.mp-vinyl.spinning{animation:spin 3s linear infinite}
+.mp-vinyl-dot{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:13px;height:13px;border-radius:50%;
+  background:radial-gradient(circle,var(--gold2),var(--gold));
+  box-shadow:0 0 8px rgba(184,146,74,.5)
+}
+.mp-info{flex:1;min-width:0}
+.mp-song{
+  font-family:'Playfair Display',serif;font-weight:700;font-size:.9rem;
+  color:var(--ivory);font-style:italic;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.mp-artist{
+  font-family:'Jost',sans-serif;font-size:.56rem;color:rgba(184,146,74,.6);
+  margin-top:3px;letter-spacing:2px;text-transform:uppercase;
+  display:flex;align-items:center;gap:5px;
+}
+.mp-artist::before{content:'♪';font-style:normal;color:var(--gold);opacity:.7}
+.mp-controls{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.mp-eq{display:flex;gap:2.5px;align-items:flex-end;height:16px}
+.mp-eqb{width:2.5px;border-radius:1px;background:linear-gradient(to top,var(--gold),var(--blush))}
+.mp-eqb.on{animation:eqDance var(--d,.4s) ease-in-out infinite alternate}
+/* progress bar under player */
+.mp-progress{height:2px;background:rgba(184,146,74,.12);position:relative}
+.mp-progress-fill{
+  height:100%;width:35%;
+  background:linear-gradient(90deg,var(--gold),var(--blush));
+  transition:width .1s linear;
+  position:relative;
+}
+.mp-progress-fill::after{
+  content:'';position:absolute;right:0;top:50%;transform:translateY(-50%);
+  width:6px;height:6px;border-radius:50%;background:var(--ivory);
+  box-shadow:0 0 6px rgba(184,146,74,.5);
+}
+.mp-vol{cursor:pointer}
+.mp-vol .ico{font-size:1rem;stroke:rgba(184,146,74,.5);transition:stroke .2s}
+.mp-vol:hover .ico{stroke:var(--gold2)}
+
+/* Stats */
+.stats-bar{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid var(--line)}
+.stat-it{padding:15px;text-align:center;border-right:1px solid var(--line)}
+.stat-it:last-child{border-right:none}
+.stat-it .ico{font-size:.88rem;stroke:var(--burg);display:block;margin:0 auto 5px}
+.stat-val{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:900;color:var(--charcoal)}
+.stat-label{font-family:'Jost',sans-serif;font-size:.48rem;letter-spacing:3px;text-transform:uppercase;color:var(--t4);margin-top:2px}
+
+/* Section label */
+.section-label{font-family:'Jost',sans-serif;font-size:.5rem;letter-spacing:5px;text-transform:uppercase;color:var(--mink);opacity:.5;display:flex;align-items:center;gap:10px;padding:18px 20px 12px}
+.section-label::after{content:'';flex:1;height:1px;background:var(--line)}
+
+/* Nav cards */
+.nav-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0}
+.nav-card{background:white;border:1px solid var(--line);padding:20px 16px 16px;cursor:pointer;transition:all .3s;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:12px;margin:-1px -1px 0 0}
+.nav-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--nc-accent,var(--burg));transform:scaleX(0);transform-origin:left;transition:transform .32s cubic-bezier(.16,1,.3,1)}
+.nav-card:hover{background:var(--ivory);z-index:1}
+.nav-card:hover::before{transform:scaleX(1)}
+.nc-top{display:flex;align-items:flex-start;justify-content:space-between}
+.nc-ico{width:36px;height:36px;display:flex;align-items:center;justify-content:center;border:1px solid var(--line2)}
+.nc-ico .ico{font-size:1rem;stroke:var(--burg)}
+.nc-arr .ico{font-size:.82rem;stroke:var(--t4);transition:all .28s}
+.nav-card:hover .nc-arr .ico{stroke:var(--burg);transform:translate(3px,-3px)}
+.nc-title{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:var(--charcoal);font-style:italic}
+.nc-sub{font-family:'Jost',sans-serif;font-size:.62rem;color:var(--t3);font-weight:300;margin-top:2px}
+.nc-wishes{--nc-accent:var(--burg)}
+.nc-letter{--nc-accent:var(--gold)}
+.nc-photos{--nc-accent:var(--burg2)}
+.nc-gifts{--nc-accent:var(--burg3)}
+
+/* Rundown */
+.rundown-wrap{padding:0 20px 6px}
+.rundown-list{display:flex;flex-direction:column;border:1px solid var(--line);background:white}
+.rundown-item{display:flex;align-items:stretch;border-bottom:1px solid var(--line);transition:background .2s;position:relative}
+.rundown-item:last-child{border-bottom:none}
+.rundown-item:hover{background:var(--blush4)}
+.rundown-time{width:72px;flex-shrink:0;padding:14px 10px;background:var(--charcoal);color:var(--ivory);font-family:'Playfair Display',serif;font-size:.78rem;font-weight:700;font-style:italic;display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.3;border-right:2px solid var(--burg)}
+.rundown-body{flex:1;padding:13px 14px;display:flex;align-items:center;gap:12px}
+.rundown-ico{width:32px;height:32px;flex-shrink:0;display:flex;align-items:center;justify-content:center;border:1px solid var(--line2);background:var(--blush3)}
+.rundown-ico .ico{font-size:.9rem;stroke:var(--burg)}
+.rundown-title{font-family:'Playfair Display',serif;font-size:.9rem;font-weight:700;color:var(--charcoal);font-style:italic}
+.rundown-desc{font-family:'Jost',sans-serif;font-size:.62rem;color:var(--t3);font-weight:300;margin-top:2px}
+.rundown-dot{position:absolute;right:13px;top:50%;transform:translateY(-50%);width:7px;height:7px;border-radius:50%;background:var(--burg);box-shadow:0 0 0 3px rgba(122,31,46,.15);display:none}
+.rundown-item.active-event .rundown-dot{display:block}
+.rundown-item.active-event .rundown-time{background:var(--burg);color:var(--ivory)}
+.rundown-item.done{opacity:.38}
+
+/* Location */
+.location-wrap{padding:0 20px 6px}
+.location-card{background:white;border:1px solid var(--line);overflow:hidden;position:relative}
+.location-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--burg),var(--gold),var(--burg2));opacity:.7}
+.location-map{width:100%;height:160px;background:var(--ivory3);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;cursor:pointer;transition:filter .25s}
+.location-map:hover{filter:brightness(.94)}
+.map-bg{position:absolute;inset:0;background:linear-gradient(rgba(236,225,212,.8),rgba(236,225,212,.8)),repeating-linear-gradient(0deg,transparent,transparent 30px,rgba(122,31,46,.05) 30px,rgba(122,31,46,.05) 31px),repeating-linear-gradient(90deg,transparent,transparent 30px,rgba(122,31,46,.05) 30px,rgba(122,31,46,.05) 31px)}
+.map-road-h{position:absolute;top:50%;left:0;right:0;height:16px;background:rgba(255,255,255,.8);transform:translateY(-50%);border-top:1px solid rgba(184,146,74,.2);border-bottom:1px solid rgba(184,146,74,.2)}
+.map-road-v{position:absolute;left:42%;top:0;bottom:0;width:12px;background:rgba(255,255,255,.8);border-left:1px solid rgba(184,146,74,.2);border-right:1px solid rgba(184,146,74,.2)}
+.map-pin{position:absolute;top:50%;left:42%;transform:translate(-50%,-100%);display:flex;flex-direction:column;align-items:center;animation:mapBounce 2s ease-in-out infinite;cursor:pointer}
+@keyframes mapBounce{0%,100%{transform:translate(-50%,-100%)}50%{transform:translate(-50%,-112%)}}
+.map-pin-head{width:30px;height:30px;border-radius:50% 50% 50% 0;background:var(--burg);transform:rotate(-45deg);box-shadow:0 4px 14px rgba(122,31,46,.4);display:flex;align-items:center;justify-content:center}
+.map-pin-head .ico{stroke:white;font-size:.78rem;transform:rotate(45deg)}
+.map-pin-shadow{width:10px;height:3px;border-radius:50%;background:rgba(42,32,24,.2);margin-top:4px}
+.map-overlay-btn{position:absolute;inset:0;display:flex;align-items:center;justify-content:flex-end;padding:12px;pointer-events:none}
+.map-open-btn{pointer-events:all;background:var(--charcoal);color:var(--ivory);font-family:'Jost',sans-serif;font-size:.55rem;letter-spacing:2px;text-transform:uppercase;border:none;padding:7px 12px;cursor:pointer;display:flex;align-items:center;gap:5px;transition:background .18s}
+.map-open-btn:hover{background:var(--burg)}
+.map-open-btn .ico{font-size:.75rem;stroke:currentColor}
+.location-info{padding:14px 16px;display:flex;align-items:flex-start;justify-content:space-between;gap:11px}
+.location-name{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:var(--charcoal);font-style:italic;margin-bottom:4px}
+.location-addr{font-family:'Jost',sans-serif;font-size:.65rem;color:var(--t3);font-weight:300;line-height:1.6;display:flex;gap:5px;align-items:flex-start}
+.location-addr .ico{font-size:.72rem;stroke:var(--burg);flex-shrink:0;margin-top:2px}
+.location-badge{background:var(--burg);color:var(--ivory);font-family:'Jost',sans-serif;font-size:.46rem;letter-spacing:2px;text-transform:uppercase;padding:4px 9px;flex-shrink:0;white-space:nowrap}
+
+/* ========================
+   SLIDE COMMON
+   ======================== */
+.sl-top{width:100%;max-width:680px;display:flex;align-items:center;justify-content:space-between;padding:18px 20px 0;flex-shrink:0;position:sticky;top:0;background:var(--ivory);z-index:5;border-bottom:1px solid var(--line);margin-bottom:0}
+.sl-back{width:40px;height:40px;background:none;border:1px solid var(--line);color:var(--t2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .22s;border-radius:0}
+.sl-back:hover{background:var(--charcoal);color:var(--ivory);border-color:var(--charcoal)}
+.sl-back .ico{font-size:.95rem;stroke:currentColor}
+.sl-head{text-align:center;padding:13px 0}
+.sl-title{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:900;color:var(--charcoal);font-style:italic}
+.sl-sub{font-family:'Jost',sans-serif;font-size:.55rem;letter-spacing:3px;text-transform:uppercase;color:var(--mink);margin-top:3px;opacity:.48}
+.sl-sp{width:40px}
+
+/* ========================
+   WISHES SLIDE
+   ======================== */
+#sl-wishes{background:var(--ivory)}
+.wishes-content{max-width:520px;width:100%;display:flex;flex-direction:column;align-items:center;gap:0;padding:26px 20px 48px;margin:0 auto}
+.wishes-frame{border:1px solid var(--line);background:white;padding:38px 30px;width:100%;position:relative}
+.wishes-frame::before,.wishes-frame::after{content:'';position:absolute;width:14px;height:14px;border-color:var(--burg2);border-style:solid;opacity:.5}
+.wishes-frame::before{top:9px;left:9px;border-width:1px 0 0 1px}
+.wishes-frame::after{bottom:9px;right:9px;border-width:0 1px 1px 0}
+.wishes-corner2,.wishes-corner3{position:absolute;width:14px;height:14px;border-color:var(--burg2);border-style:solid;opacity:.5}
+.wishes-corner2{top:9px;right:9px;border-width:1px 1px 0 0}
+.wishes-corner3{bottom:9px;left:9px;border-width:0 0 1px 1px}
+.wishes-rule{height:1px;background:linear-gradient(90deg,transparent,var(--burg2),var(--gold),var(--burg2),transparent);opacity:.28;margin:18px 0}
+.wishes-eyebrow{font-family:'Jost',sans-serif;font-size:.5rem;letter-spacing:5px;text-transform:uppercase;color:var(--mink);text-align:center;opacity:.45;margin-bottom:9px}
+.wishes-banner{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,7vw,2.8rem);font-weight:900;color:var(--charcoal);text-align:center;line-height:1.1;font-style:italic;margin-bottom:4px}
+.wishes-banner em{color:var(--burg)}
+.wishes-script{font-family:'Alex Brush',cursive;font-size:clamp(1.4rem,5vw,2rem);color:var(--burg2);text-align:center;display:block;margin-bottom:0}
+.wishes-txt{font-family:'Cormorant Infant',serif;font-size:.93rem;color:var(--t2);text-align:center;line-height:2;font-weight:300;font-style:italic;margin-top:6px}
+.wishes-stats{display:flex;gap:0;margin:22px 0 0;border:1px solid var(--line)}
+.wishes-st{flex:1;padding:14px;text-align:center;border-right:1px solid var(--line)}
+.wishes-st:last-child{border-right:none}
+.wishes-sv{font-family:'Playfair Display',serif;font-weight:900;font-size:1.35rem;color:var(--burg)}
+.wishes-sl{font-family:'Jost',sans-serif;font-size:.46rem;letter-spacing:2px;text-transform:uppercase;color:var(--t4);margin-top:3px}
+
+/* ========================
+   LETTER SLIDE
+   ======================== */
+#sl-letter{background:var(--ivory)}
+.lt-w{max-width:540px;width:100%;padding:26px 20px 48px;margin:0 auto}
+.envelope-cont{position:relative;width:270px;height:195px;margin:0 auto 26px;perspective:1100px;cursor:pointer;transition:transform .28s}
+.envelope-cont:hover{transform:scale(1.02)}
+.env-inner{position:relative;width:100%;height:100%;transform-style:preserve-3d}
+.env-body{position:absolute;inset:0;background:linear-gradient(165deg,#d4b090 0%,#a87840 50%,#d4b090 100%);box-shadow:0 16px 48px rgba(42,32,24,.18),inset 0 1px 0 rgba(255,255,255,.14)}
+.env-inner2{position:absolute;inset:8px;background:linear-gradient(180deg,var(--ivory) 0%,var(--ivory2) 100%)}
+.env-flap{position:absolute;top:0;left:0;right:0;height:55%;background:linear-gradient(180deg,#c4a070 0%,#b07040 100%);clip-path:polygon(0 100%,50% 0,100% 100%);transform-origin:top center;transition:transform 1s cubic-bezier(.68,-.55,.265,1.55);z-index:3}
+.env-inner.open .env-flap{transform:rotateX(180deg)}
+.env-seal{position:absolute;top:46%;left:50%;transform:translate(-50%,-50%);width:42px;height:42px;border-radius:50%;background:var(--burg);display:flex;align-items:center;justify-content:center;transition:all .5s .28s;z-index:4;box-shadow:0 3px 12px rgba(122,31,46,.32)}
+.env-inner.open .env-seal{opacity:0;transform:translate(-50%,-50%) scale(0)}
+.env-seal .ico{font-size:1.15rem;stroke:white;color:white}
+.env-letter{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) translateY(0);width:235px;height:155px;background:var(--ivory);box-shadow:0 8px 30px rgba(42,32,24,.1);transition:all 1s cubic-bezier(.68,-.55,.265,1.55);opacity:0;z-index:2;border-top:2px solid var(--burg)}
+.env-inner.extracted .env-letter{transform:translate(-50%,-50%) translateY(-180px);opacity:1}
+.env-letter-inner{padding:15px;text-align:center}
+.env-letter-label{font-family:'Alex Brush',cursive;font-size:.95rem;color:var(--burg);margin-bottom:5px}
+.env-letter-preview{font-family:'Jost',sans-serif;font-size:.62rem;color:var(--t3);font-weight:300}
+.lt-card{background:white;border:1px solid var(--line);padding:26px 22px;display:none;position:relative}
+.lt-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--burg),var(--gold))}
+.lt-card.show{display:block;animation:fadeUp .7s ease both}
+.lt-hdr{display:flex;align-items:center;gap:11px;padding-bottom:15px;margin-bottom:17px;border-bottom:1px solid var(--line)}
+.lt-ic{width:36px;height:36px;background:var(--burg);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.lt-ic .ico{font-size:1rem;stroke:white;color:white}
+.lt-to{font-family:'Jost',sans-serif;font-size:.48rem;letter-spacing:3px;text-transform:uppercase;color:var(--t4)}
+.lt-name{font-family:'Playfair Display',serif;font-weight:700;font-size:.92rem;color:var(--burg2);font-style:italic}
+#typed-letter{font-family:'Cormorant Infant',serif;font-size:clamp(.88rem,2.2vw,.98rem);color:var(--t2);line-height:2.2;white-space:pre-wrap;font-weight:300;font-style:italic}
+.typed-cur{display:inline-block;width:2px;height:1em;background:var(--burg);vertical-align:middle;animation:blink .7s infinite}
+
+/* ========================
+   PHOTOS
+   ======================== */
+#sl-photos{background:var(--ivory2)}
+.ph-w{max-width:960px;width:100%;padding:26px 20px 56px;margin:0 auto}
+.pol-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:28px;justify-items:center}
+.polar{
+  background:white;
+  padding:9px 9px 38px;
+  box-shadow:0 4px 16px rgba(42,32,24,.08),0 1px 4px rgba(42,32,24,.05);
+  cursor:zoom-in;
+  animation:fadeUp .65s ease both;
+  position:relative;
+  max-width:210px;width:100%;
+  will-change:transform;
+  transform-style:preserve-3d;
+  transition:transform 0.65s cubic-bezier(0.23,1,0.32,1),box-shadow 0.65s cubic-bezier(0.23,1,0.32,1),filter 0.5s ease;
+}
+.polar::before{content:'';position:absolute;top:5px;left:50%;transform:translateX(-50%);width:22px;height:6px;background:rgba(42,32,24,.055);border-radius:2px}
+.polar::after{content:'';position:absolute;inset:0;background:linear-gradient(115deg,transparent 40%,rgba(255,255,255,.5) 50%,transparent 60%);background-size:200% 200%;background-position:200% 0;transition:background-position 0.75s cubic-bezier(0.23,1,0.32,1);pointer-events:none}
+.polar:hover::after{background-position:-20% 0}
+.polar:nth-child(4n+1){transform:rotate(-2.6deg) translateY(0)}
+.polar:nth-child(4n+2){transform:rotate(2.1deg) translateY(0)}
+.polar:nth-child(4n+3){transform:rotate(-1.1deg) translateY(0)}
+.polar:nth-child(4n+4){transform:rotate(2.9deg) translateY(0)}
+.polar:hover{transform:rotate(0deg) translateY(-20px) scale(1.06) !important;box-shadow:0 30px 64px rgba(42,32,24,.18),0 8px 22px rgba(42,32,24,.1),0 0 0 1px rgba(122,31,46,.07);z-index:20;filter:brightness(1.03) saturate(1.05)}
+.polar img{width:100%;aspect-ratio:1;object-fit:cover;display:block;filter:sepia(.08) contrast(1.02) saturate(.96);transition:filter 0.6s cubic-bezier(0.23,1,0.32,1);border-radius:1px}
+.polar:hover img{filter:sepia(0) contrast(1.06) saturate(1.06)}
+.polar-cap{font-family:'Alex Brush',cursive;font-size:1.02rem;color:var(--burg2);text-align:center;padding-top:10px;line-height:1.35;opacity:.82}
+#lightbox{position:fixed;inset:0;background:rgba(42,16,14,.94);z-index:9100;display:none;align-items:center;justify-content:center;padding:24px;cursor:zoom-out;backdrop-filter:blur(28px)}
+#lightbox.active{display:flex;animation:pgIn .35s ease both}
+#lightbox img{max-width:88vw;max-height:84vh;box-shadow:0 40px 100px rgba(0,0,0,.5);animation:fadeUp .35s ease both;border:6px solid white}
+.lbox-close{position:absolute;top:20px;right:20px;width:42px;height:42px;background:rgba(250,246,241,.07);border:1px solid rgba(250,246,241,.14);color:rgba(250,246,241,.65);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .22s;border-radius:0}
+.lbox-close:hover{background:var(--burg);border-color:var(--burg);color:white}
+.lbox-close .ico{font-size:1.05rem;stroke:currentColor}
+
+/* ========================
+   GIFTS SLIDE
+   ======================== */
+#sl-gifts{background:var(--ivory)}
+.gf-w{max-width:540px;width:100%;padding:22px 20px 48px;margin:0 auto}
+.gf-intro{margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--line)}
+.gf-intro h3{font-family:'Playfair Display',serif;font-size:1.45rem;font-weight:900;color:var(--charcoal);font-style:italic;margin-bottom:5px}
+.gf-intro p{font-family:'Jost',sans-serif;font-size:.7rem;color:var(--t3);font-weight:300}
+.tickets-list{display:flex;flex-direction:column;gap:0}
+.ticket{background:white;border:1px solid var(--line);transition:all .32s;animation:fadeUp .6s ease both;position:relative;margin-bottom:-1px}
+.ticket:hover{z-index:1;box-shadow:0 8px 28px rgba(42,32,24,.1);border-color:var(--burg2)}
+.ticket-inner{display:flex;padding:17px 15px}
+.ticket-left{flex:1;padding-right:15px}
+.ticket-type{font-family:'Jost',sans-serif;font-size:.48rem;letter-spacing:3.5px;text-transform:uppercase;color:var(--mink);margin-bottom:7px;opacity:.55}
+.ticket-title{font-family:'Playfair Display',serif;font-size:1.12rem;font-weight:700;color:var(--charcoal);margin-bottom:4px;font-style:italic}
+.ticket-desc{font-family:'Jost',sans-serif;font-size:.68rem;color:var(--t3);line-height:1.6;font-weight:300}
+.ticket-sep{width:1px;background:repeating-linear-gradient(180deg,var(--mink3) 0,var(--mink3) 4px,transparent 4px,transparent 8px);margin:0 15px;position:relative}
+.ticket-sep::before,.ticket-sep::after{content:'';position:absolute;width:12px;height:12px;border-radius:50%;background:var(--ivory2);border:1px solid var(--line);left:50%;transform:translateX(-50%)}
+.ticket-sep::before{top:-6px}
+.ticket-sep::after{bottom:-6px}
+.ticket-right{width:66px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px}
+.ticket-icon{width:42px;height:42px;display:flex;align-items:center;justify-content:center;background:var(--blush3);border:1px solid var(--line2)}
+.ticket-icon .ico{font-size:1.2rem;stroke:var(--burg);color:var(--burg)}
+.ticket-tag{font-family:'Jost',sans-serif;font-size:.44rem;letter-spacing:2px;text-transform:uppercase;color:var(--mink);opacity:.48}
+.ticket-btn{width:100%;padding:10px;background:var(--charcoal);border:none;color:var(--ivory);font-family:'Jost',sans-serif;font-size:.62rem;font-weight:300;letter-spacing:3px;text-transform:uppercase;cursor:pointer;transition:all .22s;display:flex;align-items:center;justify-content:center;gap:6px}
+.ticket-btn:hover{background:var(--burg)}
+.ticket-btn .ico{font-size:.82rem;stroke:var(--ivory)}
+.ticket.claimed{opacity:.38;pointer-events:none}
+</style>
+</head>
+<body>
+
+<div class="cur" id="cursor"></div>
+<div class="cur-r" id="cursor-ring"></div>
+<div id="slide-overlay"></div>
+<div class="toast" id="toast"></div>
+
+<div id="lightbox">
+  <button class="lbox-close" onclick="closeLB()"><span class="ico"><i data-lucide="x"></i></span></button>
+  <img id="lbox-img" src="" alt=""/>
+</div>
+
+<!-- WELCOME -->
+<section id="welcome-page" class="page active">
+  <div class="w-circle"></div>
+  <div class="w-circle2"></div>
+  <div class="w-vert">Happy Birthday ✦ Ampilll ✦ With Love</div>
+  <div class="w-vert2">21st Edition ✦ 2005–2026</div>
+  <div class="w-edition">
+    <div class="w-edition-line"></div>
+    <div class="w-edition-txt">Special Edition</div>
+    <div class="w-edition-line"></div>
+  </div>
+  <div class="w-content">
+    <p class="w-vol">Volume XXI · Mei 2026</p>
+    <h1 class="w-title">Happy<em>Birthday</em></h1>
+    <p class="w-script">Ampilll</p>
+    <div class="w-divider">
+      <div class="w-divider-line"></div>
+      <div class="w-divider-dot"></div>
+      <div class="w-divider-line"></div>
+    </div>
+    <button class="w-btn" onclick="goTo('love-page')">
+      <span>Open</span>
+      <span class="ico"><i data-lucide="arrow-right"></i></span>
+    </button>
+  </div>
+</section>
+
+<!-- LOVE -->
+<section id="love-page" class="page">
+  <div class="love-dots"></div>
+  <div class="love-corner tl"></div>
+  <div class="love-corner tr"></div>
+  <div class="love-corner bl"></div>
+  <div class="love-corner br"></div>
+  <div class="love-content">
+    <p class="love-eyebrow">A Birthday Dedication</p>
+    <div class="love-scene">
+      <div class="heart-3d" id="heart3d">
+        <canvas id="hc1" class="hlayer-1" width="300" height="300"></canvas>
+        <canvas id="hc2" class="hlayer-2" width="300" height="300"></canvas>
+        <canvas id="hc3" class="hlayer-3" width="300" height="300"></canvas>
+        <canvas id="hc4" class="hlayer-4" width="300" height="300"></canvas>
+        <canvas id="hc5" class="hlayer-5" width="300" height="300"></canvas>
+      </div>
+    </div>
+    <div class="love-divider">
+      <div class="love-divider-line"></div>
+      <div class="love-divider-diamond"></div>
+      <div class="love-divider-line"></div>
+    </div>
+    <h2 class="love-headline">To the one who holds my heart.</h2>
+    <p class="love-sub">With love, always &amp; forever</p>
+    <button class="love-btn" onclick="goTo('pin-page')">
+      <span>Continue</span>
+      <span class="ico"><i data-lucide="arrow-right"></i></span>
+    </button>
+    <p class="love-footer">24 Mei 2005 &nbsp;•&nbsp; 21st Edition</p>
+  </div>
+</section>
+
+<!-- SPOTIFY -->
+<section id="spotify-page" class="page">
+  <div class="sp-art-layer"><div class="sp-half"></div><div class="sp-lines"></div></div>
+  <div class="sp-circle"></div>
+  <div class="sp-wrapper">
+    <p class="sp-eyebrow">Now Playing</p>
+    <div class="sp-card">
+      <div class="sp-video-inner">
+        <video src="" autoplay muted loop playsinline style="display:none"></video>
+        <div class="sp-video-fallback">
+          <div class="sp-music-icon"><span class="ico"><i data-lucide="music"></i></span></div>
+          <p style="font-family:'Alex Brush',cursive;font-size:1.25rem;color:rgba(122,31,46,.45)">Loml</p>
+        </div>
+      </div>
+    </div>
+    <div class="sp-song">Loml</div>
+    <div class="sp-artist">Taylor Swift</div>
+    <div class="sp-time-row"><span id="sp-t-now">0:00</span><span>3:47</span></div>
+    <div class="sp-bar"><div class="sp-bar-fill" id="sp-fill"></div></div>
+    <div class="sp-controls">
+      <button class="sp-cb"><span class="ico"><i data-lucide="shuffle"></i></span></button>
+      <button class="sp-cb"><span class="ico"><i data-lucide="skip-back"></i></span></button>
+      <button class="sp-play-btn" onclick="toggleSpPlay(this)">
+        <span class="ico" id="sp-play-icon"><i data-lucide="pause"></i></span>
+      </button>
+      <button class="sp-cb"><span class="ico"><i data-lucide="skip-forward"></i></span></button>
+      <button class="sp-cb"><span class="ico"><i data-lucide="repeat"></i></span></button>
+    </div>
+    <div class="sp-eq" id="sp-eq"></div>
+    <button class="sp-cont-btn" onclick="goTo('quiz-page'); initQuiz()">
+      <span class="ico"><i data-lucide="arrow-right"></i></span>
+      <span>Lanjut</span>
+    </button>
+  </div>
+</section>
+
+<!-- PIN -->
+<section id="pin-page" class="page">
+  <div class="pin-circle" style="width:min(70vw,440px);height:min(70vw,440px)"></div>
+  <div class="pin-circle" style="width:min(85vw,560px);height:min(85vw,560px);border-color:var(--line)"></div>
+  <div class="pin-card">
+    <p class="pin-label">Private Access</p>
+    <h2 class="pin-t">Masukkan Kode</h2>
+    <p class="pin-s">Kode rahasia untuk masuk 🔐</p>
+    <div class="pin-dots" id="pin-dots">
+      <div class="pin-dot" id="dot-0"></div>
+      <div class="pin-dot" id="dot-1"></div>
+      <div class="pin-dot" id="dot-2"></div>
+      <div class="pin-dot" id="dot-3"></div>
+    </div>
+    <div class="numpad">
+      <button class="nk" onclick="pressKey('1')">1</button>
+      <button class="nk" onclick="pressKey('2')">2</button>
+      <button class="nk" onclick="pressKey('3')">3</button>
+      <button class="nk" onclick="pressKey('4')">4</button>
+      <button class="nk" onclick="pressKey('5')">5</button>
+      <button class="nk" onclick="pressKey('6')">6</button>
+      <button class="nk" onclick="pressKey('7')">7</button>
+      <button class="nk" onclick="pressKey('8')">8</button>
+      <button class="nk" onclick="pressKey('9')">9</button>
+      <button class="nk del" onclick="clearPin()"><span class="ico"><i data-lucide="delete"></i></span></button>
+      <button class="nk" onclick="pressKey('0')">0</button>
+      <button class="nk ok" onclick="checkPin()"><span class="ico"><i data-lucide="check"></i></span></button>
+    </div>
+    <div id="pin-error" class="pin-err"></div>
+  </div>
+</section>
+
+<!-- TRANSITION -->
+<section id="transition-page" class="page">
+  <div class="tr-big-text" onclick="handleSecretClick()" style="z-index:99; pointer-events:auto; user-select:none;">BIRTHDAY</div>
+  <div class="trans-content">
+    <p class="trans-eyebrow">Countdown to Your Day</p>
+    <h1 class="trans-title">Happy Birthday <em>Ampilll</em></h1>
+    <p class="trans-sub">Menghitung hari istimewamu</p>
+    <div class="countdown-w">
+      <div class="cd-box"><div class="cd-val" id="cd-days">00</div><div class="cd-lbl">Hari</div></div>
+      <div class="cd-box"><div class="cd-val" id="cd-hours">00</div><div class="cd-lbl">Jam</div></div>
+      <div class="cd-box"><div class="cd-val" id="cd-mins">00</div><div class="cd-lbl">Menit</div></div>
+      <div class="cd-box"><div class="cd-val" id="cd-secs">00</div><div class="cd-lbl">Detik</div></div>
+    </div>
+    <p style="font-family:'Jost',sans-serif;font-size:.68rem;color:var(--t3);font-weight:300;letter-spacing:.4px" id="trans-msg">Bersiaplah untuk kejutan spesial...</p>
+    <div class="trans-loader"></div>
+  </div>
+</section>
+
+<!-- QUIZ -->
+<section id="quiz-page" class="page">
+  <div class="quiz-shell">
+    <div class="quiz-hdr-bar">
+      <div class="quiz-badge"><span class="ico"><i data-lucide="zap"></i></span> Kuis dulu~</div>
+      <span class="quiz-counter" id="q-counter">1 / 5</span>
+    </div>
+    <div class="quiz-prog"><div class="quiz-prog-fill" id="quiz-fill"></div></div>
+    <div class="quiz-card">
+      <div id="quiz-q-wrap">
+        <div class="q-eyebrow" id="q-eyebrow"><span class="ico"><i data-lucide="help-circle"></i></span> Question</div>
+        <p class="q-txt" id="q-txt"></p>
+        <div class="q-opts" id="q-opts"></div>
+      </div>
+      <div class="quiz-res" id="quiz-res">
+        <div class="trophy-w"><span class="ico"><i data-lucide="trophy"></i></span></div>
+        <h3>Selesai juga! 🎊</h3>
+        <span class="big-score" id="res-score"></span>
+        <p id="res-comment"></p>
+        <button class="quiz-go-btn" onclick="goTo('cake-page');startCake()">
+          <span class="ico"><i data-lucide="cake"></i></span>
+          <span>Lanjut ke Kejutan</span>
+        </button>
+      </div>
+    </div>
+    <p style="text-align:center;font-family:'Jost',sans-serif;font-size:.58rem;color:var(--t4);font-weight:300;letter-spacing:.4px">Jawab jujur ya... kalau berani</p>
+  </div>
+</section>
+
+<!-- ERROR PAGE -->
+<section id="error-page" class="page">
+  <div class="quiz-shell" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh;">
+    <div class="quiz-card" style="text-align: center; padding: 2.5rem; max-width: 90vw; margin: 0 auto; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-radius: 20px;">
+      <h2 style="color: var(--burg); font-family: 'Playfair Display', serif; margin-bottom: 1.5rem; font-size: 1.8rem; line-height: 1.4;">KAMU LUPA SAMA ULTAH AKU?HAHH?</h2>
+      <div style="font-size: 4rem; margin-bottom: 2rem;">💔</div>
+      <button class="quiz-go-btn" onclick="cQ=0; sc=0; goTo('welcome-page')" style="width: 100%; justify-content: center;">
+        <span class="ico"><i data-lucide="rotate-ccw"></i></span>
+        <span>ULANG LAGI</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- CAKE -->
+<section id="cake-page" class="page">
+  <div class="cake-strip"></div>
+  <div class="cake-bg-text">BIRTHDAY</div>
+  <div class="cake-content">
+    <p class="cake-eyebrow">You are Invited To</p>
+    <h1 class="cake-h1">Birthday<em>Party</em></h1>
+    <div class="cake-scene" id="cake-scene">
+      <div class="ck ck1"></div>
+      <div class="ck ck2"></div>
+      <div class="ck ck3"></div>
+      <div class="ck ck-cr"></div>
+      <div class="ck ck-cd"></div>
+      <div class="flame-w" id="flame-w"><div class="flame-g"></div><div class="flame-i"></div></div>
+    </div>
+    <p class="cake-script">Happy 21st Birthday!</p>
+    <button class="cake-go-btn" onclick="goTo('main-page')">
+      <span>Let's Go Inside</span>
+      <span class="ico"><i data-lucide="arrow-right"></i></span>
+    </button>
+  </div>
+</section>
+
+<!-- MAIN -->
+<section id="main-page" class="page">
+  <div class="main-wrap">
+    <div class="mag-header">
+      <div class="mag-header-top">
+        <div class="mag-logo"><em>ampilll</em> Magazine</div>
+        <div class="mag-date"><span class="ico"><i data-lucide="calendar"></i></span> 24 Mei 2005</div>
+        <div class="mag-date"><span class="ico"><i data-lucide="cake"></i></span> 21st</div>
+      </div>
+      <div class="mag-tagline">
+        <div class="mag-scroll">
+          <span>Happy Birthday Ampilll</span><span>21 Tahun Penuh Cinta</span>
+          <span>24 Mei 2005</span><span>Forever &amp; Always</span>
+          <span>Happy Birthday Ampilll</span><span>21 Tahun Penuh Cinta</span>
+          <span>24 Mei 2005</span><span>Forever &amp; Always</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-ed">
+      <div class="hero-ed-media">
+        <div class="hero-ed-badge">Feature</div>
+        <div class="hero-ed-fallback">
+          <iframe width="100%" height="100%" style="border-radius:12px;min-height:220px;border:none;" src="https://www.youtube.com/embed/PKdH1gtXu6U?autoplay=1&mute=1&loop=1&playlist=PKdH1gtXu6U" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="hero-ed-media-overlay" style="pointer-events: none;"></div>
+      </div>
+      <div class="hero-ed-info">
+        <div>
+          <p class="hero-ed-kicker">Special Feature · 21st Edition</p>
+          <h2 class="hero-ed-name">Happy Birthday,<br/><em>Ampilll</em></h2>
+          <p class="hero-ed-script">with love, always</p>
+          <div class="cd-card">
+            <div class="cd-card-label">Countdown</div>
+            <div id="countdown">…</div>
+          </div>
+        </div>
+        <p class="hero-ed-dob"><span class="ico"><i data-lucide="calendar-heart"></i></span> 24 Mei 2005</p>
+      </div>
+    </div>
+
+    <div class="mini-player" onclick="toggleMusic()" id="mini-player">
+      <div class="mp-inner">
+        <div class="mp-vinyl spinning" id="mp-vinyl"><div class="mp-vinyl-dot"></div></div>
+        <div class="mp-info">
+          <div class="mp-song">Loml — Taylor Swift</div>
+          <div class="mp-artist">Diputar spesial untukmu</div>
+        </div>
+        <div class="mp-controls">
+          <div class="mp-eq" id="mp-eq"></div>
+          <div class="mp-vol"><span class="ico" id="vol-ico"><i data-lucide="volume-2"></i></span></div>
+        </div>
+      </div>
+      <div class="mp-progress"><div class="mp-progress-fill" id="mp-progress-fill"></div></div>
+    </div>
+
+    <div class="stats-bar">
+      <div class="stat-it"><span class="ico"><i data-lucide="heart"></i></span><div class="stat-val">∞</div><div class="stat-label">Love</div></div>
+      <div class="stat-it"><span class="ico"><i data-lucide="star"></i></span><div class="stat-val">21</div><div class="stat-label">Years</div></div>
+      <div class="stat-it"><span class="ico"><i data-lucide="sparkles"></i></span><div class="stat-val">🥰</div><div class="stat-label">Happy</div></div>
+    </div>
+
+    <p class="section-label">Explore</p>
+    <div class="nav-grid">
+      <div class="nav-card nc-wishes" onclick="openSlide('sl-wishes')">
+        <div class="nc-top"><div class="nc-ico"><span class="ico"><i data-lucide="cake"></i></span></div><div class="nc-arr"><span class="ico"><i data-lucide="arrow-up-right"></i></span></div></div>
+        <div><div class="nc-title">Wishes</div><div class="nc-sub">Ucapan spesial</div></div>
+      </div>
+      <div class="nav-card nc-letter" onclick="openSlide('sl-letter')">
+        <div class="nc-top"><div class="nc-ico"><span class="ico"><i data-lucide="mail"></i></span></div><div class="nc-arr"><span class="ico"><i data-lucide="arrow-up-right"></i></span></div></div>
+        <div><div class="nc-title">Letter</div><div class="nc-sub">Dari hati terdalam</div></div>
+      </div>
+      <div class="nav-card nc-photos" onclick="openSlide('sl-photos')">
+        <div class="nc-top"><div class="nc-ico"><span class="ico"><i data-lucide="images"></i></span></div><div class="nc-arr"><span class="ico"><i data-lucide="arrow-up-right"></i></span></div></div>
+        <div><div class="nc-title">Photos</div><div class="nc-sub">Kenangan bersama</div></div>
+      </div>
+      <div class="nav-card nc-gifts" onclick="openSlide('sl-gifts')">
+        <div class="nc-top"><div class="nc-ico"><span class="ico"><i data-lucide="gift"></i></span></div><div class="nc-arr"><span class="ico"><i data-lucide="arrow-up-right"></i></span></div></div>
+        <div><div class="nc-title">Hadiah</div><div class="nc-sub">Tiket kejutanmu</div></div>
+      </div>
+    </div>
+
+    <div style="padding-top:4px">
+      <p class="section-label">Rundown Acara</p>
+      <div class="rundown-wrap">
+        <div class="rundown-list">
+          <div class="rundown-item done">
+            <div class="rundown-time">11.00</div>
+            <div class="rundown-body"><div class="rundown-ico"><span class="ico"><i data-lucide="sun"></i></span></div><div><div class="rundown-title">Jemput Ampilll (kalo bisa)</div><div class="rundown-desc">jemput dari rumah🌸</div></div></div>
+            <div class="rundown-dot"></div>
+          </div>
+          <div class="rundown-item active-event">
+            <div class="rundown-time">12.30</div>
+            <div class="rundown-body"><div class="rundown-ico"><span class="ico"><i data-lucide="utensils"></i></span></div><div><div class="rundown-title">Makan Siang Spesial (kalo bisa)</div><div class="rundown-desc">Dinner di tempat favorit</div></div></div>
+            <div class="rundown-dot"></div>
+          </div>
+          <div class="rundown-item">
+            <div class="rundown-time">14.30</div>
+            <div class="rundown-body"><div class="rundown-ico"><span class="ico"><i data-lucide="camera"></i></span></div><div><div class="rundown-title">Photo Session (kalo bisa)</div><div class="rundown-desc">Foto bareng di spot aesthetic ✨</div></div></div>
+            <div class="rundown-dot"></div>
+          </div>
+          <div class="rundown-item">
+            <div class="rundown-time">16.00</div>
+            <div class="rundown-body"><div class="rundown-ico"><span class="ico"><i data-lucide="coffee"></i></span></div><div><div class="rundown-title">Café Hopping (kalo bisa)</div><div class="rundown-desc">Ngopi santai sambil ngobrol seharian</div></div></div>
+            <div class="rundown-dot"></div>
+          </div>
+          <div class="rundown-item">
+            <div class="rundown-time">19.00</div>
+            <div class="rundown-body"><div class="rundown-ico"><span class="ico"><i data-lucide="cake"></i></span></div><div><div class="rundown-title">Tiup Lilin 🎂 (di lokasi masing masing)</div><div class="rundown-desc">Momen paling spesial hari ini — make a wish!</div></div></div>
+            <div class="rundown-dot"></div>
+          </div>
+          <div class="rundown-item">
+            <div class="rundown-time">20.30</div>
+            <div class="rundown-body"><div class="rundown-ico"><span class="ico"><i data-lucide="star"></i></span></div><div><div class="rundown-title">Stargazing (kalo bisa)</div><div class="rundown-desc">Duduk bareng di bawah bintang 🌙</div></div></div>
+            <div class="rundown-dot"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="location-wrap" style="padding-top:4px">
+      <p class="section-label">Lokasi Perayaan</p>
+      
+      <div class="location-card" style="margin-bottom: 12px;">
+        <div class="location-map" onclick="openMap('Jl. Nyengseret No.47, Pelindung Hewan, Kec. Astanaanyar, Kota Bandung, Jawa Barat 40243')">
+          <div class="map-bg"></div>
+          <div class="map-road-h"></div>
+          <div class="map-road-v"></div>
+          <div class="map-pin">
+            <div class="map-pin-head"><span class="ico"><i data-lucide="heart"></i></span></div>
+            <div class="map-pin-shadow"></div>
+          </div>
+          <div class="map-overlay-btn">
+            <button class="map-open-btn"><span class="ico"><i data-lucide="map-pin"></i></span> Buka Maps</button>
+          </div>
+        </div>
+        <div class="location-info">
+          <div>
+            <div class="location-name">Bandung</div>
+            <div class="location-addr"><span class="ico"><i data-lucide="map-pin"></i></span>Jl. Nyengseret No.47, Pelindung Hewan, Bandung</div>
+          </div>
+          <div class="location-badge">Loc 1</div>
+        </div>
+      </div>
+
+      <div class="location-card" style="margin-bottom: 12px;">
+        <div class="location-map" onclick="openMap('FM35+H7P, Jl. Raya Tanggulun, Tanggulun Tim., Kec. Kalijati, Kabupaten Subang, Jawa Barat 41271')">
+          <div class="map-bg"></div>
+          <div class="map-road-h"></div>
+          <div class="map-road-v"></div>
+          <div class="map-pin">
+            <div class="map-pin-head"><span class="ico"><i data-lucide="heart"></i></span></div>
+            <div class="map-pin-shadow"></div>
+          </div>
+          <div class="map-overlay-btn">
+            <button class="map-open-btn"><span class="ico"><i data-lucide="map-pin"></i></span> Buka Maps</button>
+          </div>
+        </div>
+        <div class="location-info">
+          <div>
+            <div class="location-name">Tanggulun</div>
+            <div class="location-addr"><span class="ico"><i data-lucide="map-pin"></i></span>Jl. Raya Tanggulun, Kalijati, Subang</div>
+          </div>
+          <div class="location-badge">Loc 2</div>
+        </div>
+      </div>
+
+      <div class="location-card" style="margin-bottom: 12px;">
+        <div class="location-map" onclick="openMap('GM5J+V9G, Perumahan Graha Subang Kencana 3, Wanakerta, Kec. Purwadadi, Kabupaten Subang, Jawa Barat 41261')">
+          <div class="map-bg"></div>
+          <div class="map-road-h"></div>
+          <div class="map-road-v"></div>
+          <div class="map-pin">
+            <div class="map-pin-head"><span class="ico"><i data-lucide="heart"></i></span></div>
+            <div class="map-pin-shadow"></div>
+          </div>
+          <div class="map-overlay-btn">
+            <button class="map-open-btn"><span class="ico"><i data-lucide="map-pin"></i></span> Buka Maps</button>
+          </div>
+        </div>
+        <div class="location-info">
+          <div>
+            <div class="location-name">Purwadadi</div>
+            <div class="location-addr"><span class="ico"><i data-lucide="map-pin"></i></span>Perumahan Graha Subang Kencana 3, Subang</div>
+          </div>
+          <div class="location-badge">Loc 3</div>
+        </div>
+      </div>
+
+      <div class="location-card" style="margin-bottom: 12px;">
+        <div class="location-map" onclick="openMap('Jl. Lap. Pancasila, Kalicacing, Kec. Sidomukti, Kota Salatiga, Jawa Tengah 50724')">
+          <div class="map-bg"></div>
+          <div class="map-road-h"></div>
+          <div class="map-road-v"></div>
+          <div class="map-pin">
+            <div class="map-pin-head"><span class="ico"><i data-lucide="heart"></i></span></div>
+            <div class="map-pin-shadow"></div>
+          </div>
+          <div class="map-overlay-btn">
+            <button class="map-open-btn"><span class="ico"><i data-lucide="map-pin"></i></span> Buka Maps</button>
+          </div>
+        </div>
+        <div class="location-info">
+          <div>
+            <div class="location-name">Alun-Alun Salatiga</div>
+            <div class="location-addr"><span class="ico"><i data-lucide="map-pin"></i></span>Jl. Lap. Pancasila, Salatiga, Jawa Tengah</div>
+          </div>
+          <div class="location-badge">Loc 4</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDES -->
+<section id="sl-wishes" class="slide-page" style="background:var(--ivory)">
+  <div class="sl-top">
+    <button class="sl-back" onclick="closeSlide()"><span class="ico"><i data-lucide="arrow-left"></i></span></button>
+    <div class="sl-head"><h2 class="sl-title">Birthday Wishes</h2><p class="sl-sub">Ucapan spesial untukmu</p></div>
+    <div class="sl-sp"></div>
+  </div>
+  <div class="wishes-content">
+    <div class="wishes-frame">
+      <div class="wishes-corner2"></div>
+      <div class="wishes-corner3"></div>
+      <p class="wishes-eyebrow">Mei 2026 · Vol. XXI</p>
+      <h2 class="wishes-banner">Happy Birthday<br/><em>Ampilll</em></h2>
+      <p class="wishes-script">with all my love</p>
+      <div class="wishes-rule"></div>
+      <p class="wishes-txt">Selamat ulang tahun ke-21, Ampilll! Semoga hari ini jadi yang paling indah dari semua hari yang kamu jalani.Selalu sehat, selalu bahagia, selalu senyum bahkan di hari-hari terburuk sekalipun. 🌹</p>
+      <div class="wishes-stats">
+        <div class="wishes-st"><div class="wishes-sv">21</div><div class="wishes-sl">Years</div></div>
+        <div class="wishes-st"><div class="wishes-sv">∞</div><div class="wishes-sl">Love</div></div>
+        <div class="wishes-st"><div class="wishes-sv">Always</div><div class="wishes-sl">Forever</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="sl-letter" class="slide-page" style="background:var(--ivory)">
+  <div class="sl-top">
+    <button class="sl-back" onclick="closeSlide()"><span class="ico"><i data-lucide="arrow-left"></i></span></button>
+    <div class="sl-head"><h2 class="sl-title">Surat Untukmu</h2><p class="sl-sub">Dari hati yang paling dalam</p></div>
+    <div class="sl-sp"></div>
+  </div>
+  <div class="lt-w">
+    <div class="envelope-cont" id="env-cont" onclick="openEnvelope()">
+      <div class="env-inner" id="env">
+        <div class="env-body"><div class="env-inner2"></div></div>
+        <div class="env-flap"></div>
+        <div class="env-seal"><span class="ico"><i data-lucide="heart"></i></span></div>
+        <div class="env-letter">
+          <div class="env-letter-inner">
+            <div class="env-letter-label">For You ✨</div>
+            <div class="env-letter-preview">Tap untuk membuka...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="lt-card" id="lt-card">
+      <div class="lt-hdr">
+        <div class="lt-ic"><span class="ico"><i data-lucide="mail"></i></span></div>
+        <div><div class="lt-to">Kepada Yth.</div><div class="lt-name">Kamu yang Spesial 💛</div></div>
+      </div>
+      <p id="typed-letter"></p><span class="typed-cur" id="typed-cur"></span>
+    </div>
+  </div>
+</section>
+
+<section id="sl-photos" class="slide-page" style="background:var(--ivory2)">
+  <div class="sl-top" style="background:var(--ivory2)">
+    <button class="sl-back" onclick="closeSlide()"><span class="ico"><i data-lucide="arrow-left"></i></span></button>
+    <div class="sl-head"><h2 class="sl-title">Photo Dump</h2><p class="sl-sub">Tap foto untuk zoom</p></div>
+    <div class="sl-sp"></div>
+  </div>
+  <div class="ph-w"><div class="pol-grid" id="pol-grid"></div></div>
+</section>
+
+<section id="sl-gifts" class="slide-page" style="background:var(--ivory)">
+  <div class="sl-top">
+    <button class="sl-back" onclick="closeSlide()"><span class="ico"><i data-lucide="arrow-left"></i></span></button>
+    <div class="sl-head"><h2 class="sl-title">Hadiah</h2><p class="sl-sub">Tiket kejutan spesialmu</p></div>
+    <div class="sl-sp"></div>
+  </div>
+  <div class="gf-w">
+    <div class="gf-intro"><h3>Pilih Hadiahmu 🎁</h3><p>Tap tiket untuk mengklaim hadiah spesial</p></div>
+    <div class="tickets-list" id="tickets-list"></div>
+  </div>
+</section>
+
+<script>
+lucide.createIcons();
+
+/* CURSOR */
+const cur=document.getElementById('cursor'),curR=document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px'});
+(function ar(){rx+=(mx-rx)*.13;ry+=(my-ry)*.13;curR.style.left=rx+'px';curR.style.top=ry+'px';requestAnimationFrame(ar)})();
+document.querySelectorAll('button,.nav-card,.polar,.nk,.ticket,.mini-player').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.style.width='26px';cur.style.height='26px';cur.style.opacity='.3'});
+  el.addEventListener('mouseleave',()=>{cur.style.width='8px';cur.style.height='8px';cur.style.opacity='1'});
+});
+
+/* 3D SCRIBBLE HEART */
+const hCanvases=[document.getElementById('hc1'),document.getElementById('hc2'),document.getElementById('hc3'),document.getElementById('hc4'),document.getElementById('hc5')];
+const hCtxs=hCanvases.map(c=>c.getContext('2d'));
+function heartPt(t,scale,cx,cy){
+  const x=16*Math.pow(Math.sin(t),3);
+  const y=13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t);
+  return{x:cx+x*scale,y:cy-y*scale};
+}
+function drawScribble(ctx,color){
+  const W=ctx.canvas.width,H=ctx.canvas.height;
+  ctx.clearRect(0,0,W,H);
+  const cx=W/2,cy=H/2+4,sc=W/42;
+  ctx.strokeStyle=color;ctx.lineWidth=1.6;ctx.lineCap='round';ctx.lineJoin='round';
+  ctx.beginPath();
+  const s=heartPt(0,sc,cx,cy);
+  ctx.moveTo(s.x+(Math.random()*5-2.5),s.y+(Math.random()*5-2.5));
+  for(let pass=0;pass<3;pass++){
+    for(let t=0;t<=Math.PI*2;t+=0.04){
+      const p=heartPt(t,sc,cx,cy);
+      ctx.lineTo(p.x+(Math.random()*7-3.5),p.y+(Math.random()*7-3.5));
+    }
+  }
+  ctx.stroke();
+  ctx.beginPath();
+  for(let i=0;i<55;i++){
+    const t1=Math.random()*Math.PI*2,t2=Math.random()*Math.PI*2;
+    const p1=heartPt(t1,sc,cx,cy),p2=heartPt(t2,sc,cx,cy);
+    ctx.moveTo(p1.x+(Math.random()*4-2),p1.y+(Math.random()*4-2));
+    const midX=(p1.x+p2.x)/2+(Math.random()*18-9);
+    const midY=(p1.y+p2.y)/2+(Math.random()*18-9);
+    ctx.lineTo(midX,midY);
+    ctx.lineTo(p2.x+(Math.random()*4-2),p2.y+(Math.random()*4-2));
+  }
+  ctx.stroke();
+}
+let hFrame=0;
+function heartLoop(){
+  if(hFrame%3===0) hCtxs.forEach(ctx=>drawScribble(ctx,'#7a1f2e'));
+  hFrame++;requestAnimationFrame(heartLoop);
+}
+heartLoop();
+
+/* SPOTIFY EQ */
+function buildSpEq(){const eq=document.getElementById('sp-eq');eq.innerHTML='';['.25s','.5s','.18s','.65s','.38s','.55s','.3s','.45s','.2s'].forEach(d=>{const b=document.createElement('div');b.className='sp-eqb';b.style.setProperty('--d',d);eq.appendChild(b)})}
+buildSpEq();
+
+/* SPOTIFY PROGRESS */
+let spPlaying=true,spProg=0,spTimer=null;
+function startSpProgress(){if(spTimer)clearInterval(spTimer);spTimer=setInterval(()=>{if(!spPlaying)return;spProg=Math.min(100,spProg+.245);document.getElementById('sp-fill').style.width=spProg+'%';const s=Math.floor(spProg*2.27),m=Math.floor(s/60);document.getElementById('sp-t-now').textContent=m+':'+(s%60<10?'0':'')+(s%60)},100)}
+startSpProgress();
+function toggleSpPlay(btn){spPlaying=!spPlaying;document.getElementById('sp-play-icon').innerHTML=spPlaying?'<i data-lucide="pause"></i>':'<i data-lucide="play"></i>';lucide.createIcons()}
+
+/* PIN */
+const PIN='1234';let pinIn='';
+let pinMode='main';
+function updDots(){for(let i=0;i<4;i++){const d=document.getElementById('dot-'+i);d.classList.toggle('filled',i<pinIn.length)}}
+function pressKey(n){if(pinIn.length<4){pinIn+=n;updDots();if(pinIn.length===4)setTimeout(checkPin,300)}}
+function resetPinUI(){
+  document.querySelector('.pin-label').textContent='Private Access';
+  document.querySelector('.pin-s').textContent='Kode rahasia untuk masuk 🔐';
+  document.getElementById('pin-error').textContent='';
+}
+function clearPin(){
+  if(pinIn.length>0){pinIn=pinIn.slice(0,-1);updDots()}
+  else if(pinMode==='secret'){
+    goTo('transition-page');
+    pinMode='main';
+    resetPinUI();
+  }
+}
+function checkPin(){
+  if(pinMode==='main'){
+    if(pinIn===PIN){goTo('transition-page');startCountdown()}
+    else{
+      const e=document.getElementById('pin-error');e.textContent='Salah nih! Coba lagi~ 😅';
+      const card=document.querySelector('.pin-card');card.style.animation='shake .4s ease';
+      setTimeout(()=>{e.textContent='';card.style.animation='';pinIn='';updDots()},2000)
+    }
+  } else {
+    if(pinIn==='1155'){
+      goTo('transition-page');
+      skipCountdown();
+      pinMode='main';
+      resetPinUI();
+    } else {
+      const e=document.getElementById('pin-error');e.textContent='Kode rahasia salah! ❌';
+      const card=document.querySelector('.pin-card');card.style.animation='shake .4s ease';
+      setTimeout(()=>{e.textContent='';card.style.animation='';pinIn='';updDots()},2000)
+    }
+  }
+}
+
+/* SECRET CLICK */
+let secretClickCount=0;
+let secretClickTimer=null;
+function handleSecretClick(){
+  secretClickCount++;
+  if(secretClickTimer)clearTimeout(secretClickTimer);
+  if(secretClickCount>=5){
+    secretClickCount=0;
+    pinMode='secret';
+    pinIn='';
+    updDots();
+    document.querySelector('.pin-label').textContent='Developer Access';
+    document.querySelector('.pin-s').textContent='Masukkan kode bypass ⚙️';
+    document.getElementById('pin-error').textContent='';
+    goTo('pin-page');
+  }else{
+    secretClickTimer=setTimeout(()=>{secretClickCount=0},1500);
+  }
+}
+
+/* COUNTDOWN */
+let cdInt=null;
+function skipCountdown(){if(cdInt)clearInterval(cdInt);['days','hours','mins','secs'].forEach(k=>document.getElementById('cd-'+k).textContent='00');document.getElementById('trans-msg').textContent='Hari istimewa telah tiba! 🎉';setTimeout(()=>{goTo('spotify-page');},2200)}
+function startCountdown(){
+  if(cdInt)clearInterval(cdInt);
+  const target=new Date('2026-05-24T00:00:00');
+  cdInt=setInterval(()=>{
+    const diff=target-new Date();
+    if(diff<=0){clearInterval(cdInt);['days','hours','mins','secs'].forEach(k=>document.getElementById('cd-'+k).textContent='00');document.getElementById('trans-msg').textContent='Hari istimewa telah tiba! 🎉';setTimeout(()=>{goTo('spotify-page');},2200);return}
+    const d=Math.floor(diff/86400000),h=Math.floor((diff%86400000)/3600000),m=Math.floor((diff%3600000)/60000),s=Math.floor((diff%60000)/1000);
+    document.getElementById('cd-days').textContent=String(d).padStart(2,'0');
+    document.getElementById('cd-hours').textContent=String(h).padStart(2,'0');
+    document.getElementById('cd-mins').textContent=String(m).padStart(2,'0');
+    document.getElementById('cd-secs').textContent=String(s).padStart(2,'0');
+  },1000);
+}
+
+/* QUIZ */
+const Qs=[
+  {q:'Bilang jujur... pernah bilang "udah di jalan" padahal masih di kasur?',o:['Nggak pernah, aku orang tepat waktu','Pernah sekali dua kali...','Ini udah jadi lifestyle','Bahkan bilang "udah nyampe" padahal belom keluar rumah']},
+  {q:'Pernah nulis paragraf panjang curhat di Notes terus nggak pernah dikirim ke siapapun?',o:['Nggak pernah, aku verbal banget','Pernah sekali','Ada folder khusus namanya "drafts curhatan"','Aku HIDUP di Notes app']},
+  {q:'Berapa jam tidur minimal kamu biar nggak jadi zombie keesokan harinya?',o:['8 jam, aku beauty sleep advocate','6 jam cukup lah','4 jam dan segar bugar','Tidur? Aku hidup dari kopi dan niat']},
+  {q:'Kapan Fauji Ulang Tahun?',o:['10 oktober 2006','15 november 2006','05 oktober 2006','03 april 2006']},
+  {q:'Saat shopping, mana yang lebih menggambarkan kamu?',o:['Beli cuma yang butuh, langsung pulang','Window shopping dulu 2 jam','Masuk fitting room 10 baju, beli 1','Impulse buying is my middle name']}
+];
+const LETTERS=['A','B','C','D'];
+const COMMENTS=['Kamu tuh bisa jadi konten kreator lifestyle 💅','Real ones tau kamu jawab ini dengan penuh penghayatan','Aku tau kamu skip jawaban yang paling jujur 😏','Certified relatable queen, selamat! 👑'];
+let cQ=0,sc=0;
+function initQuiz(){cQ=0;sc=0;renderQ()}
+function renderQ(){
+  document.getElementById('quiz-res').style.display='none';document.getElementById('quiz-q-wrap').style.display='block';
+  const q=Qs[cQ];
+  document.getElementById('q-txt').textContent='Q'+(cQ+1)+'. '+q.q;
+  document.getElementById('q-counter').textContent=(cQ+1)+' / '+Qs.length;
+  document.getElementById('quiz-fill').style.width=(cQ/Qs.length*100)+'%';
+  const op=document.getElementById('q-opts');op.innerHTML='';
+  q.o.forEach((o,i)=>{const b=document.createElement('button');b.className='qopt';b.innerHTML=`<span class="qopt-letter">${LETTERS[i]}</span><span class="qopt-text">${o}</span>`;b.onclick=()=>pickA(b, i);op.appendChild(b)});
+  lucide.createIcons();
+}
+function pickA(btn, oIdx){
+  document.querySelectorAll('.qopt').forEach(b=>{b.disabled=true;b.style.pointerEvents='none'});
+  btn.classList.add('picked');
+  
+  // Custom logic for the birthday question (Q4, index 3)
+  if (cQ === 3) {
+    if (oIdx !== 2) { // 2 is '05 oktober 2006' which is the 3rd option (index 2)
+      setTimeout(() => {
+        goTo('error-page');
+        lucide.createIcons();
+      }, 500);
+      return;
+    }
+  }
+
+  sc++;
+  setTimeout(()=>{
+    cQ++;
+    cQ>=Qs.length?showQuizRes():renderQ()
+  }, 650);
+}
+function showQuizRes(){
+  document.getElementById('quiz-q-wrap').style.display='none';
+  document.getElementById('quiz-res').style.display='block';
+  document.getElementById('quiz-fill').style.width='100%';
+  document.getElementById('res-score').textContent=sc+'/'+Qs.length;
+  document.getElementById('res-comment').textContent=COMMENTS[~~(Math.random()*COMMENTS.length)];
+  lucide.createIcons();startConfetti();
+}
+
+/* CAKE */
+let cakeDone=false;
+function startCake(){
+  if(cakeDone)return;cakeDone=true;
+  document.querySelectorAll('#cake-scene .ck').forEach((l,i)=>setTimeout(()=>l.classList.add('drop'),i*480));
+  setTimeout(()=>{document.getElementById('flame-w').style.opacity='1';startConfetti()},5*480+280);
+}
+
+/* CONFETTI — all reds, creams, golds — no green */
+const cfColors=['#7a1f2e','#c04055','#e8b4b8','#b8924a','#d4a85c','#faeaeb','#faf6f1','#9c2d3f','#f2d4d6','#eddcb0'];
+function startConfetti(){const ci=setInterval(spawnCf,75);setTimeout(()=>clearInterval(ci),4800)}
+function spawnCf(){const c=document.createElement('div');c.className='cf';const sz=4+Math.random()*6;c.style.cssText=`width:${sz}px;height:${sz*1.6}px;background:${cfColors[~~(Math.random()*cfColors.length)]};left:${Math.random()*100}vw;top:-16px;transform:rotate(${Math.random()*360}deg);border-radius:${Math.random()>.5?'50%':'1px'}`;document.body.appendChild(c);c.animate([{transform:'translateY(0) rotate(0deg)',opacity:1},{transform:'translateY(100vh) rotate('+(Math.random()*540)+'deg)',opacity:.1}],{duration:2000+Math.random()*1800,easing:'ease-out'}).onfinish=()=>c.remove()}
+
+/* MAIN PAGE */
+let musicOn=true;
+function startMainPage(){buildMiniEq();startMainCountdown();document.getElementById('mp-vinyl').classList.add('spinning')}
+function buildMiniEq(){const eq=document.getElementById('mp-eq');eq.innerHTML='';['.2s','.45s','.15s','.5s','.3s'].forEach(d=>{const b=document.createElement('div');b.className='mp-eqb on';b.style.setProperty('--d',d);b.style.height='4px';eq.appendChild(b)})}
+function toggleMusic(){musicOn=!musicOn;document.querySelectorAll('.mp-eqb').forEach(b=>b.classList.toggle('on',musicOn));document.getElementById('mp-vinyl').classList.toggle('spinning',musicOn);document.getElementById('vol-ico').innerHTML=musicOn?'<i data-lucide="volume-2"></i>':'<i data-lucide="volume-x"></i>';lucide.createIcons();showToast(musicOn?'Musik diputar kembali 🎵':'Musik dijeda')}
+function startMainCountdown(){const el=document.getElementById('countdown');const t=new Date('2026-05-24T00:00:00').getTime();function tick(){const d=t-Date.now();if(d<0){el.innerHTML='<em style="color:var(--burg)">🎂 Happy Birthday!</em>';return}const dd=~~(d/86400000),hh=~~((d%86400000)/3600000),mm=~~((d%3600000)/60000),ss=~~((d%60000)/1000);el.textContent=dd+'d '+hh+'h '+mm+'m '+ss+'s'}tick();setInterval(tick,1000)}
+function openMap(query){window.open('https://maps.google.com/?q='+encodeURIComponent(query),'_blank')}
+
+/* TOAST */
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2400)}
+
+/* PAGE NAV */
+function goTo(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if(id==='main-page')startMainPage();
+  if(id==='spotify-page'){buildSpEq();spProg=0;document.getElementById('sp-fill').style.width='0';startSpProgress()}
+}
+
+/* SLIDES */
+function openSlide(id){
+  document.getElementById('slide-overlay').classList.add('active');
+  document.querySelectorAll('.slide-page').forEach(s=>{s.style.animation='none';s.classList.remove('active')});
+  const s=document.getElementById(id);s.scrollTop=0;s.classList.add('active');
+  if(id==='sl-photos')renderPolaroids();
+  if(id==='sl-gifts')renderTickets();
+  if(id==='sl-letter')initEnvelope();
+}
+function closeSlide(){document.getElementById('slide-overlay').classList.remove('active');setTimeout(()=>document.querySelectorAll('.slide-page').forEach(s=>{s.style.animation='';s.classList.remove('active')}),380)}
+
+/* ENVELOPE */
+let envOpened=false;
+function initEnvelope(){envOpened=false;document.getElementById('env').classList.remove('open','extracted');document.getElementById('lt-card').classList.remove('show');document.getElementById('typed-letter').textContent='';clearTimeout(typingTimer)}
+function openEnvelope(){
+  if(envOpened)return;envOpened=true;
+  const env=document.getElementById('env');
+  env.classList.add('open');
+  setTimeout(()=>{env.classList.add('extracted');setTimeout(()=>{document.getElementById('lt-card').classList.add('show');startTyping()},850)},900);
+}
+
+/* TYPEWRITER */
+const ltrTxt=`Ampilll, selamat ulang tahun! ❤️
+
+Hari ini adalah hari yang selalu aku tunggu, karena hari ini adalah hari dimana orang yang paling cerewet lahir ke dunia.
+
+Aku bersyukur bisa bertemu denganmu, bisa mengenalmu, dan akhirnya ngertiin aku sampai sekarang.
+
+Kamu selalu membuatku tertawa, memberiku semangat, bahkan di hari-hari ketika aku merasa sangat lelah.
+
+Terima kasih karena selalu ada untukku, selalu mengerti aku, dan tidak pernah memukul aku.
+
+Semoga di umurmu yang baru ini, semua harapanmu pelan-pelan tercapai.
+
+Aku berjanji akan terus ada.
+
+Selamat ulang tahun, ampill. 🌹`;
+let tI=0,typingTimer=null;
+function startTyping(){clearTimeout(typingTimer);tI=0;document.getElementById('typed-letter').textContent='';document.getElementById('typed-cur').style.display='inline-block';tlStep()}
+function tlStep(){if(tI<ltrTxt.length){document.getElementById('typed-letter').textContent+=ltrTxt[tI++];typingTimer=setTimeout(tlStep,20)}else document.getElementById('typed-cur').style.display='none'}
+
+/* POLAROIDS */
+const photoData=[
+  {src:'img/wa1.jpeg',cap:'Moree with you ✨'},
+  {src:'img/wa2.jpeg',cap:'dukopi with you 🌹'},
+  {src:'img/wa3.jpeg',cap:'dukopi (again) with you'},
+  {src:'img/wa4.jpeg',cap:'photobooth (again) with you 💫'},
+  {src:'img/wa5.jpeg',cap:'jogja with you ❤️'},
+  {src:'img/wa6.jpeg',cap:'photobooth with you'},
+  {src:'img/wa7.jpeg',cap:'bandung with you 🤍'},
+  {src:'img/wa8.jpeg',cap:'photobooth (again) with you 🦋'}
+];
+let photosRendered=false;
+function renderPolaroids(){if(photosRendered)return;photosRendered=true;const g=document.getElementById('pol-grid');g.innerHTML='';photoData.forEach((p,i)=>{const d=document.createElement('div');d.className='polar';d.style.animationDelay=(i*.07)+'s';d.innerHTML=`<img src="${p.src}" alt="" loading="lazy"><div class="polar-cap">${p.cap}</div>`;d.onclick=()=>{document.getElementById('lbox-img').src=p.src;document.getElementById('lightbox').classList.add('active')};g.appendChild(d)})}
+function closeLB(){document.getElementById('lightbox').classList.remove('active')}
+
+/* TICKETS */
+const tickets=[
+  {id:1,title:'Dinner gacoan',desc:'Malam spesial dengan makanan favoritmu',icon:'utensils',claimed:false},
+  {id:2,title:'Film Bioskop',desc:'Nonton film pilihan kita bersama',icon:'film',claimed:false},
+  {id:3,title:'photobooth',desc:'telusuri semua photobooth',icon:'camera',claimed:false},
+  {id:4,title:'Spa Day',desc:'Relaksasi penuh di spa mewah',icon:'sparkles',claimed:false},
+  {id:5,title:'Surprise Gift',desc:'Kejutan misteri yang menunggumu…',icon:'gift',claimed:false}
+];
+let ticketsBuilt=false;
+function renderTickets(){if(ticketsBuilt)return;ticketsBuilt=true;const list=document.getElementById('tickets-list');list.innerHTML='';tickets.forEach((t,i)=>{const div=document.createElement('div');div.className='ticket';div.style.animationDelay=(i*.09)+'s';div.innerHTML=`<div class="ticket-inner"><div class="ticket-left"><div class="ticket-type">Gift Ticket · No. ${String(i+1).padStart(3,'0')}</div><div class="ticket-title">${t.title}</div><div class="ticket-desc">${t.desc}</div></div><div class="ticket-sep"></div><div class="ticket-right"><div class="ticket-icon"><span class="ico"><i data-lucide="${t.icon}"></i></span></div><div class="ticket-tag">Valid</div></div></div><button class="ticket-btn" onclick="claimTicket(${t.id},this)"><span class="ico"><i data-lucide="check-circle"></i></span>Claim</button>`;list.appendChild(div)});lucide.createIcons()}
+function claimTicket(id,btn){const t=tickets.find(x=>x.id===id);if(t&&!t.claimed){t.claimed=true;btn.innerHTML='<span class="ico"><i data-lucide="check"></i></span> Claimed!';btn.disabled=true;btn.parentElement.classList.add('claimed');lucide.createIcons();showToast('Hadiah berhasil diklaim! 🎁');startConfetti()}}
+</script>
+</body>
+  <!-- Background Music Autoplay -->
+  <audio id="bg-music" src="audio/Taylor Swift - loml (Official Lyric Video) - Taylor Swift.mp3" preload="auto" loop style="display:none"></audio>
+  <script>
+    // Play music only when entering the music page (spotify-page)
+    function playMusicOnSpotifyPage() {
+      var audio = document.getElementById('bg-music');
+      if (audio) {
+        var playPromise = audio.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(function() {
+            // If blocked, try again on first user interaction
+            var unlock = function() {
+              audio.play();
+              window.removeEventListener('click', unlock);
+              window.removeEventListener('touchstart', unlock);
+            };
+            window.addEventListener('click', unlock);
+            window.addEventListener('touchstart', unlock);
+          });
+        }
+      }
+    }
+    // Patch goTo to play music only when entering spotify-page (once), and keep playing on other pages
+    let musicStarted = false;
+    const originalGoTo = window.goTo;
+    window.goTo = function(id) {
+      originalGoTo.call(this, id);
+      if (id === 'spotify-page' && !musicStarted) {
+        playMusicOnSpotifyPage();
+        musicStarted = true;
+      }
+    };
+  </script>
+</html>
