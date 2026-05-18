@@ -454,6 +454,17 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 .nc-photos{--nc-accent:var(--burg2)}
 .nc-gifts{--nc-accent:var(--burg3)}
 
+/* Video Features */
+.vf-wrap{padding:0 20px 10px;display:flex;flex-direction:column;gap:26px}
+.vf-item{display:flex;gap:18px;align-items:center}
+.vf-item.reverse{flex-direction:row-reverse}
+.vf-vid{flex:1;background:white;border:1px solid var(--line);padding:4px;box-shadow:0 8px 24px rgba(42,32,24,.04);position:relative;border-radius:12px}
+.vf-vid::after{content:'';position:absolute;inset:0;border:1px solid var(--line2);pointer-events:none;border-radius:12px}
+.vf-vid video{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:var(--ivory2);border-radius:8px}
+.vf-text{flex:1;display:flex;flex-direction:column;gap:6px}
+.vf-t{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:var(--charcoal);font-style:italic}
+.vf-desc{font-family:'Jost',sans-serif;font-size:.65rem;color:var(--t3);line-height:1.6;font-weight:300;margin-top:2px}
+
 /* Rundown */
 .rundown-wrap{padding:0 20px 6px}
 .rundown-list{display:flex;flex-direction:column;border:1px solid var(--line);background:white}
@@ -957,6 +968,26 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
       <div class="nav-card nc-gifts" onclick="openSlide('sl-gifts')">
         <div class="nc-top"><div class="nc-ico"><span class="ico"><i data-lucide="gift"></i></span></div><div class="nc-arr"><span class="ico"><i data-lucide="arrow-up-right"></i></span></div></div>
         <div><div class="nc-title">Hadiah</div><div class="nc-sub">Tiket kejutanmu</div></div>
+      </div>
+    </div>
+
+    <div style="padding-top:10px">
+      <p class="section-label">Moments</p>
+      <div class="vf-wrap">
+        <div class="vf-item">
+          <div class="vf-vid"><video src="video/wa1.mp4" autoplay muted loop playsinline></video></div>
+          <div class="vf-text">
+            <h4 class="vf-t">For You</h4>
+            <p class="vf-desc">Website ini aku dedikasikan kepada ampil seorang untuk bisa selalu di kenang dan gaakan hilang dan gaakan basi, hanya sekedar web biasa sederhana tapi at least ada yang bisa aku kasih dan aku harap ini di bisa terima 🤍</p>
+          </div>
+        </div>
+        <div class="vf-item reverse">
+          <div class="vf-vid"><video src="video/wa2.mp4" autoplay muted loop playsinline></video></div>
+          <div class="vf-text">
+            <h4 class="vf-t">Remember Me</h4>
+            <p class="vf-desc">Makasih karna udah ngelakuin apa hal yang aku mau yaitu tolong selalu lihat ke aku, i appreciate it girl, you always do it for me. Me? The sweetest person ever? ofc everybody knows that 😏.</p>
+          </div>
+        </div>
       </div>
     </div>
 
