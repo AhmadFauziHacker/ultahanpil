@@ -1017,10 +1017,25 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
       <div class="flame-w" id="flame-w"><div class="flame-g"></div><div class="flame-i"></div></div>
     </div>
     <p class="cake-script">Happy 21st Birthday!</p>
-    <button class="cake-go-btn" onclick="goTo('main-page')">
+    <button class="cake-go-btn" onclick="showCakePopup()">
       <span>Let's Go Inside</span>
       <span class="ico"><i data-lucide="arrow-right"></i></span>
     </button>
+  </div>
+
+  <!-- Cake Popup Overlay -->
+  <div id="cake-popup" style="position:absolute; inset:0; z-index:50; background:rgba(250,246,241,.97); backdrop-filter:blur(10px); display:none; flex-direction:column; align-items:center; justify-content:center; padding: 30px; text-align:center; transition:opacity .4s ease; opacity:0;">
+    <div style="max-width:380px; padding:32px 24px; border:1px solid var(--line2); background:white; box-shadow:0 12px 40px rgba(122,31,46,.08); display:flex; flex-direction:column; align-items:center; gap:20px; animation: popIn .45s cubic-bezier(.175, .885, .32, 1.275) both;">
+      <div style="font-size:3.5rem; animation: floatEl 3s ease-in-out infinite;">🥳</div>
+      <h2 style="font-family:'Playfair Display',serif; font-size:1.7rem; color:var(--burg); font-style:italic; line-height:1.3; font-weight:700; margin:0;">
+        semua anvil faujii rayakan 🥳🎉
+      </h2>
+      <div style="width:50px; height:1px; background:var(--gold); opacity:0.6;"></div>
+      <button class="cake-go-btn" onclick="closeCakePopupAndGo()" style="margin-top:0; width:100%; justify-content:center;">
+        <span>Masuk Magazine</span>
+        <span class="ico"><i data-lucide="arrow-right"></i></span>
+      </button>
+    </div>
   </div>
 </section>
 
@@ -1581,6 +1596,28 @@ function openMap(query){window.open('https://maps.google.com/?q='+encodeURICompo
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2400)}
 
 /* PAGE NAV */
+function showCakePopup() {
+  const pop = document.getElementById('cake-popup');
+  if (pop) {
+    pop.style.display = 'flex';
+    pop.offsetHeight; // trigger reflow
+    pop.style.opacity = '1';
+  }
+}
+
+function closeCakePopupAndGo() {
+  const pop = document.getElementById('cake-popup');
+  if (pop) {
+    pop.style.opacity = '0';
+    setTimeout(() => {
+      pop.style.display = 'none';
+      goTo('main-page');
+    }, 400);
+  } else {
+    goTo('main-page');
+  }
+}
+
 function closeVideoPopup() {
   const pop = document.getElementById('video-popup');
   pop.style.opacity = '0';
