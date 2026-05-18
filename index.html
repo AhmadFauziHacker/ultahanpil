@@ -863,7 +863,7 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
   <div class="sp-wrapper" style="max-width: 500px; width: 90%;">
     <p class="sp-eyebrow">A Special Moment</p>
     <div style="width: 100%; border: 1px solid var(--sp-border); background: var(--sp-card-bg); padding: 5px; box-shadow: 0 8px 32px rgba(122,31,46,.06); margin-bottom: 22px;">
-      <video id="special-video" src="video/WhatsApp%20Video%202026-05-18%20at%2000.38.20.mp4" controls style="width: 100%; display: block; background: #000;"></video>
+      <video id="special-video" src="video/WhatsApp%20Video%202026-05-18%20at%2000.38.20.mp4" preload="metadata" controls style="width: 100%; display: block; background: #000;"></video>
     </div>
     <button class="sp-cont-btn" onclick="goTo('spotify-page')">
       <span>Lanjut</span>
@@ -1110,14 +1110,14 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
       <p class="section-label">Moments</p>
       <div class="vf-wrap">
         <div class="vf-item">
-          <div class="vf-vid"><video src="video/wa1.mp4" autoplay muted loop playsinline></video></div>
+          <div class="vf-vid"><video class="moment-video" src="video/wa1.mp4" muted loop playsinline preload="none"></video></div>
           <div class="vf-text">
             <h4 class="vf-t">For You</h4>
             <p class="vf-desc">Website ini aku dedikasikan kepada ampil seorang untuk bisa selalu di kenang dan gaakan hilang dan gaakan basi, hanya sekedar web biasa sederhana tapi at least ada yang bisa aku kasih dan aku harap ini di bisa terima 🤍</p>
           </div>
         </div>
         <div class="vf-item reverse">
-          <div class="vf-vid"><video src="video/wa2.mp4" autoplay muted loop playsinline></video></div>
+          <div class="vf-vid"><video class="moment-video" src="video/wa2.mp4" muted loop playsinline preload="none"></video></div>
           <div class="vf-text">
             <h4 class="vf-t">Remember Me</h4>
             <p class="vf-desc">Makasih karna udah ngelakuin apa hal yang aku mau yaitu tolong selalu lihat ke aku, i appreciate it girl, you always do it for me. Me? The sweetest person ever? ofc everybody knows that 😏.</p>
@@ -1390,9 +1390,13 @@ function drawScribble(ctx,color){
   ctx.stroke();
 }
 let hFrame=0;
+let heartActive=false;
 function heartLoop(){
-  if(hFrame%3===0) hCtxs.forEach(ctx=>drawScribble(ctx,'#7a1f2e'));
-  hFrame++;requestAnimationFrame(heartLoop);
+  if(heartActive){
+    if(hFrame%3===0) hCtxs.forEach(ctx=>drawScribble(ctx,'#7a1f2e'));
+    hFrame++;
+  }
+  requestAnimationFrame(heartLoop);
 }
 heartLoop();
 
@@ -1589,8 +1593,20 @@ function goTo(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   
+  heartActive = (id === 'love-page');
+  
   const vid = document.getElementById('special-video');
   if(vid && id !== 'video-page') vid.pause();
+
+  // Control moment videos based on active page
+  const momentVids = document.querySelectorAll('.moment-video');
+  if(id === 'main-page'){
+    momentVids.forEach(v => {
+      v.play().catch(e => console.log('Video play blocked:', e));
+    });
+  } else {
+    momentVids.forEach(v => v.pause());
+  }
 
   if(id==='main-page')startMainPage();
   if(id==='spotify-page'){buildSpEq();spProg=0;document.getElementById('sp-fill').style.width='0';startSpProgress()}
