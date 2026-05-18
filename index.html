@@ -1277,6 +1277,43 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
         </div>
       </div>
     </div>
+
+    <!-- FEEDBACK FORM (ABSOLUTE BOTTOM) -->
+    <div style="padding: 24px 20px 0;">
+      <p class="section-label">Feedback</p>
+      <div style="background:linear-gradient(145deg, #ffffff 0%, #fdfbf9 100%); border:1px solid var(--line2); padding:40px 30px; position:relative; box-shadow:0 12px 36px rgba(122,31,46,.04);">
+        
+        <!-- Premium Editorial Corners -->
+        <div style="position:absolute; width:12px; height:12px; border-color:var(--burg); border-style:solid; top:12px; left:12px; border-width:1px 0 0 1px; opacity:.4;"></div>
+        <div style="position:absolute; width:12px; height:12px; border-color:var(--burg); border-style:solid; top:12px; right:12px; border-width:1px 1px 0 0; opacity:.4;"></div>
+        <div style="position:absolute; width:12px; height:12px; border-color:var(--burg); border-style:solid; bottom:12px; left:12px; border-width:0 0 1px 1px; opacity:.4;"></div>
+        <div style="position:absolute; width:12px; height:12px; border-color:var(--burg); border-style:solid; bottom:12px; right:12px; border-width:0 1px 1px 0; opacity:.4;"></div>
+        
+        <h3 style="font-family:'Playfair Display',serif; font-size:1.4rem; font-weight:700; color:var(--charcoal); text-align:center; line-height:1.4; margin-bottom:10px;">
+          say something dulu dong,<br/>
+          <em style="color:var(--burg); font-style:italic; font-weight:900;">please give me the word 😉</em>
+        </h3>
+        
+        <p style="font-family:'Jost',sans-serif; font-size:.68rem; color:var(--t3); font-weight:300; text-align:center; margin-bottom:28px; line-height:1.6; letter-spacing:0.3px;">
+          Punya kritik, saran, atau sekadar kata-kata manis untuk Fauji? Tulis di bawah ini ya, langsung terkirim ke WhatsApp-nya! ✨
+        </p>
+        
+        <div style="display:flex; flex-direction:column; gap:16px; max-width:440px; margin:0 auto;">
+          <div>
+            <label style="font-family:'Jost',sans-serif; font-size:.56rem; letter-spacing:2.5px; text-transform:uppercase; color:var(--mink); display:block; margin-bottom:6px; font-weight:500;">Nama Kamu</label>
+            <input type="text" id="fb-name" placeholder="Siapa nama kamu? 🌸" style="width:100%; padding:12px 16px; border:1px solid var(--line); font-family:'Jost',sans-serif; font-size:.8rem; background:#faf6f1; color:var(--charcoal); border-radius:0; outline:none; transition:all .25s ease;" onfocus="this.style.borderColor='var(--burg)'; this.style.background='white'; this.style.boxShadow='0 4px 12px rgba(122,31,46,.03)';" onblur="this.style.borderColor='var(--line)'; this.style.background='#faf6f1'; this.style.boxShadow='none';">
+          </div>
+          <div>
+            <label style="font-family:'Jost',sans-serif; font-size:.56rem; letter-spacing:2.5px; text-transform:uppercase; color:var(--mink); display:block; margin-bottom:6px; font-weight:500;">Pesan Kritik & Saran</label>
+            <textarea id="fb-message" rows="3" placeholder="Tulis pesan manis, saran perbaikan, atau kritikan pedas di sini... 💬" style="width:100%; padding:12px 16px; border:1px solid var(--line); font-family:'Jost',sans-serif; font-size:.8rem; background:#faf6f1; color:var(--charcoal); border-radius:0; outline:none; resize:none; transition:all .25s ease;" onfocus="this.style.borderColor='var(--burg)'; this.style.background='white'; this.style.boxShadow='0 4px 12px rgba(122,31,46,.03)';" onblur="this.style.borderColor='var(--line)'; this.style.background='#faf6f1'; this.style.boxShadow='none';"></textarea>
+          </div>
+          <button class="cake-go-btn" onclick="sendFeedbackToWA()" style="margin-top:8px; width:100%; justify-content:center; gap:10px; height:46px;">
+            <span class="ico"><i data-lucide="send"></i></span>
+            <span>Kirim ke WhatsApp</span>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -1673,7 +1710,7 @@ function openEnvelope(){
 /* TYPEWRITER */
 const ltrTxt=`Ampilll, selamat ulang tahun! ❤️
 
-Hari ini adalah hari yang selalu aku tunggu, karena hari ini adalah hari dimana orang yang paling cerewet lahir ke dunia.
+Hari ini adalah hari yang selalu ditunggu, karena hari ini adalah hari dimana orang yang paling gaje lahir ke dunia.
 
 Aku bersyukur bisa bertemu denganmu, bisa mengenalmu, dan akhirnya ngertiin aku sampai sekarang.
 
@@ -1716,6 +1753,25 @@ const tickets=[
 let ticketsBuilt=false;
 function renderTickets(){if(ticketsBuilt)return;ticketsBuilt=true;const list=document.getElementById('tickets-list');list.innerHTML='';tickets.forEach((t,i)=>{const div=document.createElement('div');div.className='ticket';div.style.animationDelay=(i*.09)+'s';div.innerHTML=`<div class="ticket-inner"><div class="ticket-left"><div class="ticket-type">Gift Ticket · No. ${String(i+1).padStart(3,'0')}</div><div class="ticket-title">${t.title}</div><div class="ticket-desc">${t.desc}</div></div><div class="ticket-sep"></div><div class="ticket-right"><div class="ticket-icon"><span class="ico"><i data-lucide="${t.icon}"></i></span></div><div class="ticket-tag">Valid</div></div></div><button class="ticket-btn" onclick="claimTicket(${t.id},this)"><span class="ico"><i data-lucide="check-circle"></i></span>Claim</button>`;list.appendChild(div)});lucide.createIcons()}
 function claimTicket(id,btn){const t=tickets.find(x=>x.id===id);if(t&&!t.claimed){t.claimed=true;btn.innerHTML='<span class="ico"><i data-lucide="check"></i></span> Claimed!';btn.disabled=true;btn.parentElement.classList.add('claimed');lucide.createIcons();showToast('Hadiah berhasil diklaim! 🎁');startConfetti()}}
+
+/* CRITIQUE & FEEDBACK */
+function sendFeedbackToWA() {
+  const name = document.getElementById('fb-name').value.trim();
+  const msg = document.getElementById('fb-message').value.trim();
+  
+  if (!name || !msg) {
+    showToast('Nama dan pesan tidak boleh kosong! ⚠️');
+    return;
+  }
+  
+  // Masukkan nomor WhatsApp Anda di sini (wajib menggunakan format kode negara, e.g. 628...)
+  const targetNumber = '6283102033275'; // <-- GANTI DENGAN NOMOR WHATSAPP ANDA
+  
+  const formattedText = `Halo Fauji,\n\nAda kritik & saran masuk dari website ultah nih!\n\n*Nama:* ${name}\n*Pesan:* ${msg}\n\nTerima kasih ya! ✨`;
+  
+  const waUrl = `https://api.whatsapp.com/send?phone=${targetNumber}&text=${encodeURIComponent(formattedText)}`;
+  window.open(waUrl, '_blank');
+}
 </script>
 </body>
   <!-- Background Music Autoplay -->
